@@ -21,7 +21,10 @@ export const spacing = {
 		tiny: hp('4%'),
 		small: hp('8%'),
 		medium: hp('12%'),
+		large: hp('24%'),
 		mega: hp('90%'),
 		tera: hp('100%'),
 	},
+	wp,
+	hp,
 };

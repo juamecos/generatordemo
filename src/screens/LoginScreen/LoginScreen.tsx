@@ -1,44 +1,36 @@
-import React, { FC, useEffect } from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import React, { FC, useEffect } from 'react';
+import { SafeAreaView } from 'react-native';
 import style from './LoginScreenStyle';
 import { LoginScreenProps } from './LoginScreenProps';
 
+import Text from 'src/components/Text';
+import LoginForm from 'src/components/Forms/LoginForm';
 
 /**
  * Screen component description
  *
  * @returns Screen
  */
-const LoginScreen: FC<LoginScreenProps> = ({ route, navigation }) => {
-  // From the previous screen
-  const initialParams = route?.params
 
-  // Context
-  
+const LoginScreen: FC<LoginScreenProps> = () => {
+	// From the previous screen
+	// const initialParams = route?.params;
 
-  // Custom hooks
- 
+	// Context
 
-  // Internal state
-  
+	// Custom hooks
 
-  useEffect(() => {
-    
-  }, [])
+	// Internal state
 
-  // Component JSX
-  return (
-    <SafeAreaView 
-    // style={}
-      testID='LoginScreen'
-    >
-      <Text
-        // style={}
-      >
-        This is a screen template
-      </Text>
-    </SafeAreaView>
-  )
+	useEffect(() => {}, []);
+
+	// Component JSX
+	return (
+		<SafeAreaView style={style.screenWrapper} testID='LoginScreen'>
+			<Text h1 title='Login' style={style.title} />
+			<LoginForm />
+		</SafeAreaView>
+	);
 };
 
 export default LoginScreen;

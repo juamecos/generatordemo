@@ -23,6 +23,7 @@ const CustomButton: React.FC<Props> = ({
 	styleBtn,
 	styleText,
 	iconName,
+	textButton,
 	primary,
 	secondary,
 	rounded,
@@ -43,6 +44,7 @@ const CustomButton: React.FC<Props> = ({
 			onPress={onPress}
 			style={[
 				styles.container,
+				textButton && { borderWidth: 0, backgroundColor: color.transparent },
 				primary && {
 					borderColor: color.primary,
 					backgroundColor: color.primary,
@@ -69,7 +71,16 @@ const CustomButton: React.FC<Props> = ({
 					color={iconTextColor()}
 				/>
 			)}
-			<Text style={[{ color: iconTextColor() }, styleText]}> {title} </Text>
+			<Text
+				style={[
+					{ color: iconTextColor() },
+					textButton && { color: color.primary },
+					styleText,
+				]}
+			>
+				{' '}
+				{title}{' '}
+			</Text>
 		</TouchableOpacity>
 	);
 };

@@ -6,9 +6,10 @@ export default StyleSheet.create({
 	container: {
 		alignItems: 'center',
 		backgroundColor: color.primary,
+		borderWidth: StyleSheet.hairlineWidth,
 		flexDirection: 'row',
 		justifyContent: 'center',
-		paddingVertical: spacing.vertical.nano,
+		paddingVertical: spacing.vertical.tiny,
 		paddingHorizontal: spacing.horizontal.small,
 	},
 	textBtn: {

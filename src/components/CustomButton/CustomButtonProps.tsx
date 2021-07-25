@@ -5,6 +5,7 @@ export interface Props {
 	styleBtn?: ViewStyle;
 	styleText?: TextStyle;
 	iconName?: string;
+	textButton?: boolean;
 	primary?: boolean;
 	secondary?: boolean;
 	rounded?: boolean;

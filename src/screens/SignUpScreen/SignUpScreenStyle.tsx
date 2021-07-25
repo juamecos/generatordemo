@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../theme/spacing';
+import { spacing } from 'src/theme';
 
 export default StyleSheet.create({
 	title: {
@@ -9,5 +9,8 @@ export default StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	buttonGroup: {
+		flexDirection: 'row',
 	},
 });
