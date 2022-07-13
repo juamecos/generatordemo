@@ -1,0 +1,63 @@
+mutation signIn($email: String!, $password: String!) {
+  signIn(email: $email, password: $password) {
+    status
+    message
+    token
+  }
+}
+mutation signUp($user: UserInput!) {
+  signUp(user: $user) {
+    status
+    message
+    user {
+      id
+      userName
+      email
+      registerDate
+      avatar
+      bio
+      country
+      role
+      active
+    }
+  }
+}
+
+mutation deleteUser($id: Int!) {
+  deleteUser(id: $id) {
+    status
+    message
+  }
+}
+
+mutation blockUser ($id: Int!) {
+  blockUser(id: $id) {
+    status
+    message
+  }
+}
+
+mutation updateUser($user: UserInput!, $include: Boolean!) {
+  updateUser(user: $user) {
+    status
+    message
+    user {
+      id
+    #  ...UserObject
+    }
+  }
+}
+
+mutation activeUserAction( $email: String!, $otp: String! ) {
+  activeUserAction(email: $email, otp: $otp) {
+    status
+    message
+  }
+}
+
+mutation resetPasswordAction($email: String!, $otp: String!, $password: String!, $confirmPassword: String!) {
+  resetPasswordAction(email: $email, otp: $otp, password: $password, confirmPassword: $confirmPassword) {
+    status
+    message
+  }
+}

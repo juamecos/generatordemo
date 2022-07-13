@@ -1,14 +1,61 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Field } from 'formik';
 import FormField from 'src/components/Forms/Field';
 import SubmitButton from 'src/components/Forms/SubmitButton';
 import FormContainer from 'src/components/Forms//FormContainer';
 import { loginValidationSchema } from 'src/utils/ValidationSchema';
 import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useAuth } from 'src/context/authContext/authContext';
+import { useSignInMutation } from 'src/generated/graphql';
+import Toast from 'react-native-toast-message';
+
+interface IValues {
+	email: string;
+	password: string;
+}
+
+const initialValuesObject: IValues = {
+	email: '',
+	password: '',
+};
 
 const LoginForm = () => {
-	const navigation = useNavigation();
+	const isMounted = useRef(true);
+	const { signIn: singInAuth, checkingAuth } = useAuth();
+
+	const [signIn, { data, loading, error }] = useSignInMutation({
+		fetchPolicy: 'network-only',
+	});
+
+	React.useEffect(() => {
+		return () => {
+			isMounted.current = false;
+		};
+	}, []);
+	React.useEffect(() => {
+		if (error) {
+			Toast.show({
+				type: 'error',
+				text1: error.message!,
+			});
+		}
+		if (data && !data?.signIn?.status) {
+			Toast.show({
+				type: 'error',
+				text1: data.signIn?.message!,
+			});
+		}
+
+		if (!loading && data?.signIn?.token) {
+			Toast.show({
+				type: 'success',
+				text1: data.signIn?.message!,
+			});
+			singInAuth(data.signIn.token);
+			isMounted.current = false;
+		}
+	}, [data, loading, error]);
+
 	return (
 		<View testID='login-form'>
 			<FormContainer
@@ -18,25 +65,33 @@ const LoginForm = () => {
 					password: '',
 				}}
 				validationSchema={loginValidationSchema}
-				onSubmit={(values: any) => {
-					console.log(values);
-					navigation.navigate('HomeScreen');
+				onSubmit={async (values: IValues, { resetForm }: any) => {
+					checkingAuth();
+					try {
+						signIn({
+							variables: {
+								email: values.email,
+								password: values.password,
+							},
+						});
+					} catch (err) {
+						console.log(err);
+					}
 				}}
 			>
 				<Field
-					testID='userName'
 					component={FormField}
-					label='Username'
-					name='userName'
-					placeholder='Username'
-					autofocus
+					name='email'
+					label='E-mail'
+					autoCompleteType='email'
+					keyboardType='email-address'
+					textContentType='emailAddress'
 				/>
 
 				<Field
 					component={FormField}
 					label='Password'
 					name='password'
-					placeholder='Password'
 					secureTextEntry
 					textContentType='password'
 				/>

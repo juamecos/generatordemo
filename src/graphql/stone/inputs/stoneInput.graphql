@@ -1,0 +1,7 @@
+input AddStoneInput {
+	image: String!
+	latitude: Float!
+	longitude: Float!
+	title: String
+	description: String
+}

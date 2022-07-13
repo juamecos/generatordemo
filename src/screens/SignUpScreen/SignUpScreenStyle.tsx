@@ -11,6 +11,6 @@ export default StyleSheet.create({
 		alignItems: 'center',
 	},
 	buttonGroup: {
-		flexDirection: 'row',
+		// flexDirection: 'row',
 	},
 });

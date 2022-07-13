@@ -1,0 +1,88 @@
+query users($page: Int!, $itemsPage: Int!) {
+  users(page: $page, itemsPage: $itemsPage) {
+    info {
+      ...ResultInfoObject
+    }
+    status
+    message
+    users {
+       id
+      userName
+      email
+      registerDate
+      avatar
+      bio
+      country
+      role
+      active
+    }
+  }
+}
+
+query Me {
+  me {
+    status
+    message
+    user {
+       id
+      userName
+      email
+      registerDate
+      avatar
+      bio
+      country
+      role
+      active
+    }
+  }
+}
+
+query user($id: Int!) {
+  user(id: $id) {
+    status
+    message
+    user {
+       id
+      userName
+      email
+      registerDate
+      avatar
+      bio
+      country
+      role
+      active     
+    }
+  }
+}
+
+query userProfile($id: Int!) {
+  user(id: $id) {
+    status
+    message
+    user {
+      userName
+      email
+      password
+      registerDate
+      avatar
+      bio
+      country
+      role
+      active
+      stones {
+        id
+        image
+      }
+      likes {
+        id 
+        stone{
+          id
+          image
+        }
+      }
+      stoneCount
+      likeCount
+      foundCount
+    }
+  }
+}

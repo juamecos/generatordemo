@@ -1,0 +1,10 @@
+  fragment LikeObject on Like {
+    id
+    stone{
+      id
+    }
+    user{
+      id
+    }
+    registerDate
+  }

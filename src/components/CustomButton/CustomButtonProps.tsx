@@ -5,9 +5,15 @@ export interface Props {
 	styleBtn?: ViewStyle;
 	styleText?: TextStyle;
 	iconName?: string;
+	iconSize?: number;
+	iconColor?: string;
+	disabled?: boolean;
+	right?: boolean;
 	textButton?: boolean;
+	textColor?: string;
 	primary?: boolean;
 	secondary?: boolean;
+	danger?: boolean;
 	rounded?: boolean;
 	bordered?: boolean;
 	small?: boolean;

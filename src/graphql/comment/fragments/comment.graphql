@@ -1,0 +1,16 @@
+fragment CommentObject on Comment {
+  __typename
+  id
+  stone {
+    id
+  }
+  comment
+  registerDate
+  active
+  abuse
+  user {
+    id
+    userName
+    avatar
+  }
+}

@@ -2,6 +2,8 @@ apply plugin: "com.android.application"
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 import com.android.build.OutputFile
 
+
+
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -120,6 +122,18 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+/**
+*Google API Key environment variable
+*
+*/
+
+def getApiKey(){
+    def Properties props = new Properties()
+    props.load(new FileInputStream(new File('secrets.properties')))
+    return props['GOOGLE_MAPS_API_KEY']
+}
+
+
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -136,6 +150,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [ GOOGLE_MAPS_API_KEY:getApiKey()]
     }
     splits {
         abi {
@@ -184,6 +199,12 @@ android {
 }
 
 dependencies {
+    implementation(project(':react-native-maps')){
+    exclude group: 'com.google.android.gms', module: 'play-services-base'
+    exclude group: 'com.google.android.gms', module: 'play-services-maps'
+   }
+   implementation 'com.google.android.gms:play-services-base:17.2.1'
+   implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules

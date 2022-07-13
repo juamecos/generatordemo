@@ -1,0 +1,14 @@
+fragment UserObject on User {
+  id
+  userName
+  email
+  password 
+  registerDate 
+  avatar
+  role 
+  active
+  otp  {
+    hash
+    exp
+  }
+}

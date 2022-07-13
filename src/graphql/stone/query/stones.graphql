@@ -1,0 +1,85 @@
+query Stones($page: Int, $itemsPage: Int) {
+  stones(page: $page, itemsPage: $itemsPage) {
+    info {
+      ...ResultInfoObject
+    }
+    status
+    message
+    stones {
+      id
+      image
+      title
+      description
+      registerDate
+      latitude
+      longitude
+      user {
+        userName
+        id
+        avatar
+      }
+      active
+      abuse
+      commentCount
+      comments {
+        id
+        comment
+        registerDate
+        active
+        abuse
+        user {
+          id
+          userName
+          avatar
+        }
+      }
+      likeCount
+      likes {
+        id
+        stone {
+          id
+        }
+        user {
+          id
+        }
+      }
+      foundCount
+    }
+  }
+}
+
+query Stone($stoneId: Int!) {
+  stone(id: $stoneId) {
+    status
+    message
+    stone {
+      id
+      image
+      title
+      description
+      registerDate
+      user {
+        id
+        userName
+        avatar
+      }
+      active
+      abuse
+      commentCount
+      comments {
+        id
+        comment
+        registerDate
+        active
+        abuse
+        user {
+          id
+          userName
+          avatar
+        }
+      }
+      likeCount
+      foundCount
+    }
+  }
+}

@@ -1,0 +1,33 @@
+mutation addStone($stone: AddStoneInput!) {
+   addStone(stone: $stone) {
+    status
+    message
+    stone {
+      ...StoneObject
+    }
+  }
+}
+
+mutation updateStone( $stone: StoneInput!) {
+  updateStone( stone: $stone) {
+    status
+    message
+    stone {
+      ...StoneObject
+    }
+  }
+}
+
+mutation deleteStone($id: Int!) {
+  deleteStone(id: $id) {
+    status
+    message
+  }
+}
+
+mutation blockStone ($id: Int!) {
+  blockStone(id: $id) {
+    status
+    message
+  }
+}

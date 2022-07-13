@@ -1,0 +1,19 @@
+mutation addLike ($id: Int!) {
+  addLike(id: $id) {
+    status
+    message
+    like {
+      ...LikeObject
+    }
+  }
+}
+
+mutation deleteLike($id: Int!) {
+  deleteLike(id: $id) {
+    status
+    message
+    like {
+      ...LikeObject
+    }
+  }
+}

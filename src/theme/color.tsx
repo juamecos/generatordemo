@@ -60,4 +60,9 @@ export const color = {
 	 * Error messages and icons.
 	 */
 	error: palette.error,
+	/**
+	 * The modal background.
+	 */
+
+	modalBg: '#7777776f',
 };
