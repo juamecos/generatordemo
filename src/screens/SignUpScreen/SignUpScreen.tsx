@@ -7,6 +7,7 @@ import SignUpForm from 'src/components/Forms/SignUpForm';
 import CustomButton from 'src/components/CustomButton';
 import { color, spacing } from 'src/theme';
 import { useHolaQuery } from 'src/generated/graphql';
+import BackArrow from 'src/components/BackArrow';
 
 /**
  * Screen component description
@@ -14,22 +15,6 @@ import { useHolaQuery } from 'src/generated/graphql';
  * @returns Screen
  */
 const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
-	// const { data, loading, error } = useHolaQuery();
-	// if (loading) {
-	// 	console.log(loading, 'signupscreens hola loading');
-	// }
-	// if (error) {
-	// 	console.log(error, 'signupscreens hola error');
-	// }
-	// if (data) {
-	// 	console.log(data, 'signup screen hola data');
-	// }
-	// Context
-
-	// Custom hooks
-
-	// Internal state
-
 	useEffect(() => {}, []);
 
 	// Component JSX
@@ -52,6 +37,7 @@ const SignUpScreen: FC<SignUpScreenProps> = ({ navigation }) => {
 					styleBtn={{ marginTop: spacing.vertical.micro }}
 				/>
 			</View>
+			<BackArrow />
 		</SafeAreaView>
 	);
 };

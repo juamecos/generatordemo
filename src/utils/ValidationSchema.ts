@@ -27,5 +27,15 @@ const signUpValidationSchema = Yup.object().shape({
 });
 
 const loginValidationSchema = Yup.object().shape({ email, password });
+const forgotValidationSchema = Yup.object().shape({ email });
+const resetPasswordValidationSchema = Yup.object().shape({
+	password,
+	confirmPassword,
+});
 
-export { signUpValidationSchema, loginValidationSchema };
+export {
+	signUpValidationSchema,
+	loginValidationSchema,
+	forgotValidationSchema,
+	resetPasswordValidationSchema,
+};

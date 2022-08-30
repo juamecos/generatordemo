@@ -1,21 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { SafeAreaView, View, ScrollView } from 'react-native';
-import { ProfileScreenProps } from './ProfileScreenProps';
 import style from './ProfileScreenStyle';
 import IconText from '../../components/IconText/IconText';
 import Avatar from 'src/components/Avatar';
 import Text from 'src/components/Text';
-import { color } from 'src/theme';
+import { color, spacing } from 'src/theme';
 import Title from 'src/components/Title';
-import { useUser } from 'src/context/userContext.tsx/userContext';
 import { useState } from 'react';
 import { useAuth } from 'src/context/authContext/authContext';
 import { ProfileStackProps } from 'src/navigation/ProfileStackNavigator/ProfileNavigator';
-import { useUserQuery } from '../../generated/graphql';
+import { useUserQuery, useUserProfileQuery } from '../../generated/graphql';
 import Loader from 'src/components/Loader';
 import BackArrow from 'src/components/BackArrow';
-import { decodeToken } from 'src/utils/tokens';
 
 /**
  * Screen component description
@@ -29,12 +26,11 @@ const ProfileScreen: FC<ProfileStackProps> = ({ route, navigation }) => {
 	// Context
 	const { signOut } = useAuth();
 
-	const { data, loading, error } = useUserQuery({
+	const { data, loading, error } = useUserProfileQuery({
 		variables: { id: initialParams?.userId! },
 	});
 
 	// Internal state
-	const [modalVisible, setModalVisible] = useState(false);
 
 	if (loading) {
 		return <Loader />;
@@ -44,17 +40,19 @@ const ProfileScreen: FC<ProfileStackProps> = ({ route, navigation }) => {
 		console.log(error.message);
 	}
 
-	if (data && data?.user?.user) {
-		console.log(data.user.user);
+	if (!data) {
+		return null;
 	}
 
-	const user = data?.user?.user;
+	const user = data && data?.user?.user;
+
+	const { userName, avatar, country, likeCount, stoneCount } = user;
 
 	// Component JSX
 	return (
 		<SafeAreaView style={style.container} testID='ProfileScreen'>
 			<ScrollView>
-				<Title title='Profile' />
+				{/* <Title title='Profile' /> */}
 
 				<IconText
 					bottom
@@ -66,71 +64,82 @@ const ProfileScreen: FC<ProfileStackProps> = ({ route, navigation }) => {
 
 				<View style={style.userInfoSection}>
 					<View style={style.userAvatarSection}>
-						<Avatar />
+						<Avatar avatar={avatar} size={25} />
 					</View>
-					<Text h4 bold title={user.userName ? user.userName : ''} />
-					<IconText
-						iconName='location-outline'
-						size={18}
-						title={user.country ? user.country : 'Spain'}
-						iconColor={color.primary}
-					/>
-					<IconText
-						iconName='reader-outline'
-						size={18}
-						title={user.bio ? user.bio : "User hasn't filled any bio"}
-						iconColor={color.primary}
-					/>
+					<Text h1 bold title={userName} style={style.userName} />
+					<Text h4 title={country} />
 				</View>
 				<View style={style.infoBoxWrapper}>
-					<View
-						style={[
-							style.infoBox,
-							{
-								borderRightColor: color.palette.lighterGrey,
-								borderRightWidth: 1,
-							},
-						]}
-					>
-						<Text h3 bold title='Friends' />
-						<Text h4 title='23' />
+					<View style={[style.infoBox]}>
+						<Text h2 bold title={stoneCount} textColor={color.palette.white} />
+						<Text h4 title='Stones' textColor={color.palette.white} />
+					</View>
+					<View style={[style.infoBox]}>
+						<Text h2 bold title={likeCount} textColor={color.palette.white} />
+						<Text h4 title='Likes' textColor={color.palette.white} />
 					</View>
 
 					<View style={style.infoBox}>
-						<Text h3 bold title='Stones' />
-						<Text h4 title='23' />
+						<Text h2 bold title='23' textColor={color.palette.white} />
+						<Text h4 title='Found' textColor={color.palette.white} />
 					</View>
 				</View>
 				<View style={style.menuWrapper}>
-					<IconText
-						iconName='bookmark-outline'
-						iconColor={color.secondary}
-						title='Favorites'
-					/>
+					<View style={style.menuContent}>
+						<IconText
+							bottom
+							iconName='bookmark-outline'
+							iconColor={color.palette.blue}
+							textStyle={style.menuItemText}
+							title='Favorites'
+							style={style.menuItem}
+						/>
 
-					<IconText
-						iconName='arrow-redo-outline'
-						iconColor={color.secondary}
-						title='Tell your friends'
-					/>
+						<IconText
+							bottom
+							iconName='arrow-redo-outline'
+							iconColor={color.secondary}
+							textStyle={style.menuItemText}
+							title='Share'
+							style={style.menuItem}
+						/>
 
-					<IconText
-						iconName='help-buoy-outline'
-						iconColor={color.secondary}
-						title='Support'
-					/>
+						<IconText
+							bottom
+							iconName='help-buoy-outline'
+							iconColor={color.primary}
+							textStyle={style.menuItemText}
+							title='Support'
+							style={style.menuItem}
+						/>
 
-					<IconText
-						iconName='settings-outline'
-						iconColor={color.secondary}
-						title='Settings'
-					/>
-					<IconText
-						iconName='log-out-outline'
-						iconColor={color.secondary}
-						title='Logout'
-						onPress={() => signOut()}
-					/>
+						<IconText
+							bottom
+							iconName='settings-outline'
+							iconColor={color.palette.grey}
+							textStyle={style.menuItemText}
+							title='Settings'
+							style={style.menuItem}
+						/>
+						<IconText
+							bottom
+							iconName='create-outline'
+							style={style.menuItem}
+							title='Edit'
+							onPress={() => navigation?.navigate('EditProfileScreen')}
+							iconColor={color.palette.green}
+							textStyle={style.menuItemText}
+						/>
+						<IconText
+							bottom
+							iconName='log-out-outline'
+							iconColor={color.palette.red}
+							textStyle={style.menuItemText}
+							title='Logout'
+							style={style.menuItem}
+							onPress={() => signOut()}
+						/>
+					</View>
 				</View>
 			</ScrollView>
 			<BackArrow />

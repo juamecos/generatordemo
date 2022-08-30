@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Loader from 'src/components/Loader';
 import { useStonesQuery } from 'src/generated/graphql';
 import useModalWithData from 'src/hooks/useModalWithData';
@@ -28,6 +28,7 @@ export const useStonesHook = () => {
 		useModalWithData(false, initialSelected);
 
 	const [isFetching, setIsFetching] = useState(false);
+	const [moreItemsToShow, setMoreItemsToShow] = useState(true);
 
 	const { data, error, loading, fetchMore, refetch } = useStonesQuery({
 		fetchPolicy: 'cache-and-network',
@@ -41,6 +42,21 @@ export const useStonesHook = () => {
 
 	const stonesInfoPage = useRef({} as IStonePageInfo);
 
+	useEffect(() => {
+		if (!data) {
+			setIsFetching(true);
+		}
+		if (stonesInfoPage.current.page < stonesInfoPage.current.pages) {
+			setMoreItemsToShow(true);
+		}
+		if (data && stonesInfoPage.current.page === stonesInfoPage.current.pages) {
+			setMoreItemsToShow(false);
+		}
+		setIsFetching(false);
+
+		return () => {};
+	}, [data]);
+
 	if (data && data?.stones?.info) {
 		stonesInfoPage.current = data.stones?.info;
 	}
@@ -52,8 +68,6 @@ export const useStonesHook = () => {
 	};
 
 	const handleOnEndReached = () => {
-		console.log('End reached');
-
 		if (
 			stonesInfoPage.current.page &&
 			stonesInfoPage.current.page < stonesInfoPage.current.pages
@@ -121,6 +135,7 @@ export const useStonesHook = () => {
 		stonesInfoPage,
 		stonesArray,
 		isFetching,
+		moreItemsToShow,
 		modalOpen,
 		selected,
 		setModalOpen,

@@ -15,6 +15,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import ImagePickerScreen from 'src/screens/ImagePickerScreen';
 import { useUser } from 'src/context/userContext.tsx/userContext';
 import { usePermissions } from 'src/context/permissionsContext/permissionsContext';
+import { BlockUserMutationResult } from '../../generated/graphql';
+import { shadow } from 'src/theme/shadow';
+import Loader from 'src/components/Loader';
 
 export enum TabNames {
 	Home = 'HomeScreen',
@@ -32,6 +35,8 @@ const HomeTabsNavigator = () => {
 	const { navigate } = useNavigation();
 	const { id } = useUser();
 
+	if (!id) return <Loader />;
+
 	return (
 		<Tab.Navigator
 			initialRouteName={TabNames.Home}
@@ -44,9 +49,9 @@ const HomeTabsNavigator = () => {
 					left: spacing.horizontal.micro,
 					right: spacing.horizontal.micro,
 					backgroundColor: color.palette.white,
-					borderRadius: spacing.vertical.micro,
+					borderRadius: spacing.vertical.nano,
 					height: spacing.vertical.small,
-					// ...styles.shadow,
+					...shadow.light,
 				},
 			}}
 		>
@@ -61,9 +66,6 @@ const HomeTabsNavigator = () => {
 							iconName={focused ? 'home' : 'home-outline'}
 							title={t('home', { ns: 'bottomTab' })}
 							onPress={() => navigate(TabNames.Home)}
-							// onPress={() => {
-							// 	console.log('On press on Home tab');
-							// }}
 							iconColor={focused ? color.primaryDarker : color.text}
 							textColor={focused ? color.primaryDarker : color.text}
 						/>
@@ -96,20 +98,16 @@ const HomeTabsNavigator = () => {
 							<Icon
 								name='add'
 								color={color.palette.white}
-								size={spacing.vertical.small}
+								size={spacing.vertical.small - spacing.vertical.micro}
+								style={{
+									paddingLeft: 1,
+								}}
 							/>
 						),
 						tabBarButton: props => (
 							<CustomTabBarButton
-								focused
 								onPress={() => navigate('ImagePickerScreen')}
 								children={props.children}
-								style={{
-									justifyContent: 'center',
-									alignItems: 'center',
-									textAlign: 'center',
-									padingLeft: 5,
-								}}
 							/>
 						),
 					}}

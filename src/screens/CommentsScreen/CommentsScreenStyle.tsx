@@ -5,7 +5,7 @@ import { color } from 'src/theme/color';
 
 export default StyleSheet.create({
 	image: {
-		height: spacing.vertical.huge,
+		height: spacing.vertical.twoThirds,
 		width: spacing.wp(100),
 
 		overflow: 'hidden',

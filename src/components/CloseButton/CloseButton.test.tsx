@@ -6,7 +6,7 @@ import 'react-native';
 import React from 'react';
 import {render} from '@testing-library/react-native';
 
-import CrimeMap from './CrimeMap';
+import CloseButton from './CloseButton';
 
 
 
@@ -15,12 +15,12 @@ const createTestProps = (props: object) => ({
 });
 
 
-describe('<CrimeMap />', () => {
+describe('<CloseButton />', () => {
   const props = createTestProps({});
-  const { getByTestId } = render(<CrimeMap {...props}/>);
+  const { getByTestId } = render(<CloseButton {...props}/>);
 
   test('renders correctly', () => {
-  const element = getByTestId('CrimeMap');
+  const element = getByTestId('CloseButton');
   expect(element).toBeTruthy(); 
     
   });

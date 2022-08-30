@@ -81,11 +81,7 @@ const PreviewScreen: FC<PreviewScreenProps> = ({ route, navigation }) => {
 
 	// Component JSX
 	return (
-		<ScrollView
-			testID='PreviewScreen'
-			style={styles.container}
-			persistentScrollbar={false}
-		>
+		<View testID='PreviewScreen' style={styles.container}>
 			<View style={styles.imageWrapper}>
 				<Image
 					source={{ uri: base64img }}
@@ -93,14 +89,11 @@ const PreviewScreen: FC<PreviewScreenProps> = ({ route, navigation }) => {
 					resizeMode='cover'
 				/>
 			</View>
-			<View style={styles.wrapperInfo}>
+			<View style={styles.infoWrapper}>
 				<View style={styles.info}>
 					<View style={styles.infoLeft}>
 						<View style={styles.avatar}>
-							<Avatar
-								avatar={avatar ? avatar : ''}
-								radius={spacing.vertical.large / 2}
-							/>
+							<Avatar avatar={avatar ? avatar : ''} />
 						</View>
 					</View>
 					<View style={styles.infoRight}>
@@ -135,28 +128,30 @@ const PreviewScreen: FC<PreviewScreenProps> = ({ route, navigation }) => {
 				</View>
 			</View>
 			<BackArrow />
-			<CustomButton
-				medium
-				rounded
-				disabled={!image.base64 && !location.latitude && !location.longitude}
-				styleBtn={{
-					width: '30%',
-					position: 'absolute',
-					bottom: spacing.hp(20),
-					right: spacing.wp(50),
-					transform: [{ translateX: 50 }],
-				}}
-				title='Publish'
-				onPress={async () => {
-					const result = await registerStone();
+			<View style={styles.buttonWrapper}>
+				<CustomButton
+					medium
+					rounded
+					disabled={!image.base64 && !location.latitude && !location.longitude}
+					styleBtn={{
+						width: '30%',
+						// position: 'absolute',
+						// bottom: spacing.hp(0),
+						// right: spacing.wp(50),
+						// transform: [{ translateX: 50 }],
+					}}
+					title='Publish'
+					onPress={async () => {
+						const result = await registerStone();
 
-					console.log(result);
+						console.log(result);
 
-					// navigation?.navigate('SingleStoneScreen', { stone: stoneData });
-					// navigation?.navigate('HomeScreen');
-				}}
-			/>
-		</ScrollView>
+						// navigation?.navigate('SingleStoneScreen', { stone: stoneData });
+						// navigation?.navigate('HomeScreen');
+					}}
+				/>
+			</View>
+		</View>
 	);
 };
 

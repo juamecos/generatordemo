@@ -1,8 +1,12 @@
-import React, { FC, useEffect } from 'react'
-import { SafeAreaView, Text } from 'react-native'
+import React, { FC, useEffect } from 'react';
+import { SafeAreaView } from 'react-native';
 import style from './ForgotScreenStyle';
 import { ForgotScreenProps } from './ForgotScreenProps';
-
+import Text from 'src/components/Text';
+import CustomButton from 'src/components/CustomButton';
+import { spacing, color } from 'src/theme';
+import ForgotForm from 'src/components/Forms/ForgotForm';
+import BackArrow from 'src/components/BackArrow';
 
 /**
  * Screen component description
@@ -10,35 +14,30 @@ import { ForgotScreenProps } from './ForgotScreenProps';
  * @returns Screen
  */
 const ForgotScreen: FC<ForgotScreenProps> = ({ route, navigation }) => {
-  // From the previous screen
-  const initialParams = route?.params
+	// From the previous screen
+	const initialParams = route?.params;
 
-  // Context
-  
+	// Context
 
-  // Custom hooks
- 
+	// Custom hooks
 
-  // Internal state
-  
+	// Internal state
 
-  useEffect(() => {
-    
-  }, [])
+	useEffect(() => {}, []);
 
-  // Component JSX
-  return (
-    <SafeAreaView 
-    // style={}
-      testID='ForgotScreen'
-    >
-      <Text
-        // style={}
-      >
-        This is a screen template
-      </Text>
-    </SafeAreaView>
-  )
+	// Component JSX
+	return (
+		<SafeAreaView
+			// style={}
+			testID='ForgotScreen'
+			style={style.screenWrapper}
+		>
+			<Text h1 title='Reset Password - Email' style={style.title} />
+			<ForgotForm />
+
+			<BackArrow />
+		</SafeAreaView>
+	);
 };
 
 export default ForgotScreen;

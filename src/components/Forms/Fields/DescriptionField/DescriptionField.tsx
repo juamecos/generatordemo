@@ -16,13 +16,12 @@ const DescriptionField = (props: any) => {
 	const hasError = errors[name] && touched[name];
 	return (
 		<View testID='textarea-component' style={styles.inputBox}>
-			<Text h5 title={label} />
+			<Text h4 title={label} textColor={color.primary} />
 			<TextInput
 				multiline
 				numberOfLines={inputProps.numberOfLines}
 				placeholder={placeholder}
 				placeholderTextColor={color.primary}
-				contextMenuHidden
 				autoCorrect={inputProps.autoCorrect}
 				style={styles.inputComponent}
 				onChangeText={text => onChange(name)(text)}

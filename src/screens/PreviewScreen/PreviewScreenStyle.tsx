@@ -4,25 +4,23 @@ import { spacing } from '../../theme/spacing';
 
 export default StyleSheet.create({
 	container: {
-		position: 'absolute',
-		top: 0,
-		right: 0,
-		left: 0,
-		bottom: 0,
+		flex: 1,
 		backgroundColor: color.palette.offWhite,
 	},
 	imageWrapper: {
+		flex: 6,
 		width: spacing.wp(100),
-		height: spacing.vertical.huge,
-		borderBottomEndRadius: spacing.vertical.nano,
-		borderBottomStartRadius: spacing.vertical.nano,
+		height: spacing.vertical.twoThirds,
+		borderBottomEndRadius: spacing.vertical.small,
+		borderBottomStartRadius: spacing.vertical.small,
 		overflow: 'hidden',
 	},
 	image: {
 		flex: 1,
 		backgroundColor: color.modalBg,
 	},
-	wrapperInfo: {
+	infoWrapper: {
+		flex: 2,
 		paddingHorizontal: spacing.horizontal.tiny,
 	},
 	info: {
@@ -51,5 +49,11 @@ export default StyleSheet.create({
 	},
 	infoItemTitle: {
 		color: color.primary,
+	},
+	buttonWrapper: {
+		flex: 1,
+		justifyContent: 'center',
+
+		alignItems: 'center',
 	},
 });

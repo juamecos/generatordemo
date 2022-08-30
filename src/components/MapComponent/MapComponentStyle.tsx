@@ -1,11 +1,19 @@
 import { StyleSheet } from 'react-native';
-import { spacing, color } from 'src/theme';
+import { color } from 'src/theme';
 
 export default StyleSheet.create({
 	map: {
-		height: spacing.hp(100),
-		width: spacing.wp(100),
-		backgroundColor: 'orange',
-		marginBottom: 20,
+		height: '100%',
+	},
+	buttonGroup: {
+		position: 'absolute',
+		right: 0,
+		left: 0,
+		bottom: 0,
+		height: '10%',
+		flexDirection: 'row',
+		backgroundColor: color.palette.offWhite,
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
 	},
 });

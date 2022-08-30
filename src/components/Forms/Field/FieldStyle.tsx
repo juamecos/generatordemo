@@ -3,10 +3,10 @@ import { color, spacing } from 'src/theme';
 
 export default StyleSheet.create({
 	inputBox: {
-		borderBottomColor: color.line,
+		borderBottomColor: color.primary,
 		borderBottomWidth: 1,
-		height: 50,
-		marginVertical: spacing.vertical.micro,
+		minHeight: 50,
+		marginVertical: spacing.vertical.nano,
 	},
 	inputComponent: {
 		paddingVertical: 0,

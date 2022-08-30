@@ -1,19 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import Geolocation from 'react-native-geolocation-service';
 import { usePermissions } from 'src/context/permissionsContext/permissionsContext';
 import { ReverseGeolocationResult } from 'src/interfaces/ReverseGeolocationResult';
 import i18n from 'src/languages/i18n';
 import useSWR from 'swr';
 import { ILocation } from '../context/stoneContext/stoneContextTypes';
-import { useToast } from 'react-native-toast-notifications';
+import Toast, { ErrorToast, SuccessToast } from 'react-native-toast-message';
 import LoadingScreen from 'src/screens/LoadingScreen';
 
 const fetcher = (...args) => fetch(...args).then(response => response.json());
 
-const useGeolocation = () => {
+type Props = {
+	currentPosition: ILocation | undefined;
+	country: string;
+	countryCode: string;
+	subdivision: string;
+	locality: string;
+	setCountry: React.Dispatch<React.SetStateAction<string>>;
+	setCountryCode: React.Dispatch<React.SetStateAction<string>>;
+	setSubdivision: React.Dispatch<React.SetStateAction<string>>;
+	setLocality: React.Dispatch<React.SetStateAction<string>>;
+	setCurrentPosition: Dispatch<SetStateAction<ILocation | undefined>>;
+};
+
+const useGeolocation = (): Props => {
 	const { locationStatus } = usePermissions();
 	const language = i18n.language;
 	const [country, setCountry] = useState('');
+	const [countryCode, setCountryCode] = useState('');
 	const [subdivision, setSubdivision] = useState('');
 	const [locality, setLocality] = useState('');
 	const [currentPosition, setCurrentPosition] = useState<ILocation>();
@@ -35,8 +49,10 @@ const useGeolocation = () => {
 					});
 				},
 				err => {
-					// See error code charts below.
-					console.log(err.code, err.message);
+					ErrorToast({
+						text1: `Error Code: ${err.code}`,
+						text2: `Error Message: ${err.message}`,
+					});
 				},
 				{ enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
 			);
@@ -45,6 +61,7 @@ const useGeolocation = () => {
 
 	useEffect(() => {
 		if (data) {
+			setCountryCode(data.countryCode);
 			setCountry(data.countryName);
 			setSubdivision(data.principalSubdivision);
 			setLocality(data.locality);
@@ -66,9 +83,11 @@ const useGeolocation = () => {
 	return {
 		currentPosition,
 		country,
+		countryCode,
 		subdivision,
 		locality,
 		setCountry,
+		setCountryCode,
 		setSubdivision,
 		setLocality,
 		setCurrentPosition,

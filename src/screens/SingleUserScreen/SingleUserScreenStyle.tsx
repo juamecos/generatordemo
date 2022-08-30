@@ -3,31 +3,36 @@ import { color, spacing } from 'src/theme';
 
 export default StyleSheet.create({
 	container: {
-		paddingHorizontal: spacing.horizontal.tiny,
+		backgroundColor: color.primary,
+		borderBottomEndRadius: spacing.horizontal.small,
+		borderBottomStartRadius: spacing.horizontal.small,
+		marginBottom: spacing.vertical.nano,
 	},
 	infoSection: {
 		minHeight: 200,
-		paddingVertical: spacing.vertical.tiny,
+		paddingVertical: spacing.vertical.small,
 		justifyContent: 'center',
 		alignItems: 'center',
+		backgroundColor: color.palette.white,
+		borderBottomEndRadius: spacing.horizontal.small,
+		borderBottomStartRadius: spacing.horizontal.small,
 	},
 	userAvatarSection: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		marginBottom: spacing.vertical.tiny,
 	},
-	userInfoSecction: {
-		// backgroundColor: 'red',
-		justifyContent: 'center',
-		alignSelf: 'flex-start',
+	userName: {
+		paddingTop: spacing.vertical.tiny,
 	},
+
 	infoBoxWrapper: {
-		borderBottomColor: color.palette.lighterGrey,
-		borderBottomWidth: 1,
-		borderTopColor: color.palette.lighterGrey,
-		borderTopWidth: 1,
 		flexDirection: 'row',
+		justifyContent: 'center',
 		height: spacing.vertical.medium,
+		paddingHorizontal: spacing.horizontal.tiny,
+		borderBottomEndRadius: spacing.horizontal.small,
+		borderBottomStartRadius: spacing.horizontal.small,
+		backgroundColor: color.primary,
 	},
 
 	infoBox: {

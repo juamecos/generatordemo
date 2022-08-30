@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'src/theme';
+import { constants } from 'src/theme/constants';
 import { spacing } from '../../theme/spacing';
 
 export default StyleSheet.create({
@@ -13,9 +14,10 @@ export default StyleSheet.create({
 	},
 	imageWrapper: {
 		width: spacing.wp(100),
-		height: spacing.vertical.huge,
-		borderBottomEndRadius: spacing.vertical.nano,
-		borderBottomStartRadius: spacing.vertical.nano,
+		height: spacing.vertical.twoThirds,
+		borderBottomEndRadius: constants.CARD_BORDER_RADIUS,
+		borderBottomStartRadius: constants.CARD_BORDER_RADIUS,
+		backgroundColor: color.palette.black,
 		overflow: 'hidden',
 	},
 	image: {
@@ -30,7 +32,6 @@ export default StyleSheet.create({
 		marginBottom: spacing.vertical.micro,
 	},
 	infoLeft: {
-		paddingRight: spacing.horizontal.tiny,
 		width: spacing.horizontal.large,
 	},
 	avatar: {
@@ -44,7 +45,9 @@ export default StyleSheet.create({
 		paddingBottom: spacing.vertical.micro,
 		paddingLeft: spacing.horizontal.nano,
 	},
-	stoneTitle: {},
+	infoText: {
+		paddingLeft: spacing.horizontal.tiny,
+	},
 	infoItem: {
 		padding: spacing.horizontal.micro,
 		marginHorizontal: spacing.horizontal.micro,

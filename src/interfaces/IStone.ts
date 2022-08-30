@@ -22,4 +22,5 @@ export interface IStone {
 	likes?: [ILike];
 	foundCount: number;
 	founds?: [IFound];
+	distance?: number;
 }

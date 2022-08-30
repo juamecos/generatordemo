@@ -1,22 +1,22 @@
 import { StyleSheet } from 'react-native';
 import { color } from 'src/theme';
+import { shadow } from 'src/theme/shadow';
 import { spacing } from '../../theme/spacing';
+
+const buttonDiameter = spacing.vertical.small - spacing.vertical.nano;
 
 export default StyleSheet.create({
 	container: {
-		top: -spacing.vertical.small / 2,
 		justifyContent: 'center',
 		alignItems: 'center',
+		...shadow.dark,
 	},
 	wrapper: {
-		width: spacing.vertical.small,
-		height: spacing.vertical.small,
+		width: buttonDiameter,
+		height: buttonDiameter,
 		borderRadius: 9999,
-		backgroundColor: color.primary,
-	},
-	focused: {
 		backgroundColor: color.primaryDarker,
-		shadowColor: color.primaryDarker,
-		elevation: 20,
+
+		elevation: 5,
 	},
 });

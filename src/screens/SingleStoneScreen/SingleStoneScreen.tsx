@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { Image, ScrollView, View } from 'react-native';
+import React, { FC, useEffect, useState, useRef } from 'react';
+import { Image, ScrollView, View, Animated } from 'react-native';
 import styles from './SingleStoneScreenStyle';
 import { SingleStoneScreenProps } from './SingleStoneScreenProps';
 import Text from 'src/components/Text';
@@ -10,7 +10,12 @@ import { spacing, color } from 'src/theme';
 import BackArrow from 'src/components/BackArrow';
 import { useStoneQuery } from 'src/generated/graphql';
 import Loader from 'src/components/Loader';
-import Toast from 'react-native-toast-message';
+import {
+	PinchGestureHandler,
+	PinchGestureHandlerStateChangeEvent,
+	State,
+} from 'react-native-gesture-handler';
+import ZoomableImage from 'src/components/ZoomableImage';
 
 /**
  * Screen component description
@@ -21,7 +26,14 @@ const SingleStoneScreen: FC<SingleStoneScreenProps> = ({
 	route,
 	navigation,
 }) => {
+	const pinchRef = useRef<PinchGestureHandler>();
+	console.log(pinchRef.current);
+
 	const initialParams = route?.params;
+	const pinchScale = useRef(new Animated.Value(1)).current;
+	const baseScale = useRef(new Animated.Value(1)).current;
+	const scale = Animated.multiply(baseScale, pinchScale);
+	const [lastScale, setLastScale] = useState(1);
 
 	// const [stone, setStone] = useState();
 
@@ -31,6 +43,21 @@ const SingleStoneScreen: FC<SingleStoneScreenProps> = ({
 		},
 		fetchPolicy: 'cache-first',
 	});
+
+	const onPinchGestureEvent = Animated.event(
+		[{ nativeEvent: { scale: pinchScale } }],
+		{
+			useNativeDriver: true,
+		}
+	);
+
+	const onHandlerStateChange = (event: PinchGestureHandlerStateChangeEvent) => {
+		if (event.nativeEvent.oldState === State.ACTIVE) {
+			setLastScale(value => value * event.nativeEvent.scale);
+			baseScale.setValue(lastScale);
+			pinchScale.setValue(1);
+		}
+	};
 
 	if (loading) {
 		<Loader />;
@@ -46,6 +73,9 @@ const SingleStoneScreen: FC<SingleStoneScreenProps> = ({
 
 	const stone = data?.stone?.stone;
 
+	const imageWidth = spacing.wp(100);
+	const imageHeight = spacing.hp(66);
+
 	// Component JSX
 	return (
 		<ScrollView
@@ -54,10 +84,10 @@ const SingleStoneScreen: FC<SingleStoneScreenProps> = ({
 			persistentScrollbar={false}
 		>
 			<View style={styles.imageWrapper}>
-				<Image
-					source={{ uri: stone.image }}
-					style={styles.image}
-					resizeMode='cover'
+				<ZoomableImage
+					image={stone.image}
+					imageWidth={imageWidth}
+					imageHeight={imageHeight}
 				/>
 			</View>
 			<View style={styles.wrapperInfo}>
@@ -66,7 +96,7 @@ const SingleStoneScreen: FC<SingleStoneScreenProps> = ({
 						<View style={styles.avatar}>
 							<Avatar
 								avatar={stone.user.avatar ? stone.user.avatar : ''}
-								radius={spacing.vertical.large / 2}
+								size={spacing.vertical.small / 3}
 							/>
 						</View>
 					</View>
@@ -85,16 +115,13 @@ const SingleStoneScreen: FC<SingleStoneScreenProps> = ({
 								h4
 								bold
 								italic
-								title={stone.title || 'Este es el título y puede ser muy largo'}
+								title={stone.title}
 								textColor={color.primary}
 							/>
 							<Text
 								h5
 								italic
-								title={
-									stone.description ||
-									'Esta es la descripción que también puede ser muy larga si el usuario se esplaya'
-								}
+								title={stone.description}
 								textColor={color.primary}
 							/>
 						</View>
@@ -102,13 +129,13 @@ const SingleStoneScreen: FC<SingleStoneScreenProps> = ({
 				</View>
 			</View>
 			<View style={styles.info}>
-				<View
-					style={[
-						styles.infoLeft,
-						{ paddingHorizontal: spacing.horizontal.tiny },
-					]}
-				>
-					<Text h4 title='Info' textColor={color.primary} />
+				<View style={styles.infoLeft}>
+					<Text
+						h4
+						title='Info'
+						textColor={color.primary}
+						style={styles.infoText}
+					/>
 				</View>
 				<ScrollView
 					horizontal={true}

@@ -4,6 +4,7 @@ import styles from './ImageCarrouselStyle';
 import { spacing } from '../../theme/spacing';
 import Text from '../Text';
 import { useNavigation } from '@react-navigation/native';
+import { color } from 'src/theme';
 
 type ImageCarouselItem = {
 	id: number | string;
@@ -18,8 +19,8 @@ export type Props = {
 const ImageCarrousel: React.FC<Props> = ({ data, title }) => {
 	const { navigate } = useNavigation();
 	return (
-		<View testID='ImageCarrousel'>
-			<Text h3 title={title} style={styles.title} />
+		<View testID='ImageCarrousel' style={styles.container}>
+			<Text h2 bold title={title} textColor={color.primaryDarker} />
 			<FlatList
 				data={data}
 				renderItem={({ item, index }) => {

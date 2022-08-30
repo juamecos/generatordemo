@@ -38,9 +38,10 @@ const CustomButton: React.FC<Props> = ({
 	title,
 	styleBtn,
 	styleText,
-	iconName,
 	disabled,
+	active,
 	right,
+	iconName,
 	iconSize,
 	iconColor,
 	textButton,
@@ -49,7 +50,8 @@ const CustomButton: React.FC<Props> = ({
 	secondary,
 	danger,
 	rounded,
-	bordered,
+	bordered = false,
+	mini,
 	small,
 	medium,
 	large,
@@ -59,6 +61,7 @@ const CustomButton: React.FC<Props> = ({
 		if (!bordered) return color.textWhite;
 		if (primary && bordered) return color.primary;
 		if (secondary && bordered) return color.secondary;
+		if (disabled && textButton) return color.palette.green;
 	};
 	return (
 		<TouchableOpacity
@@ -82,13 +85,18 @@ const CustomButton: React.FC<Props> = ({
 				},
 				rounded && { borderRadius: 1000 },
 				disabled && { backgroundColor: palette.lightGrey },
+				disabled && textButton && { backgroundColor: color.transparent },
 				right && {
 					flexDirection: 'row-reverse',
 				},
-				bordered && { borderWidth: 1 },
+				bordered ? { borderWidth: 1 } : { borderWidth: 0 },
 				primary && bordered && { backgroundColor: palette.white },
 				secondary && bordered && { backgroundColor: palette.white },
 				danger && bordered && { backgroundColor: palette.white },
+				mini && {
+					paddingHorizontal: 0.5 * spacing.horizontal.tiny,
+					paddingVertical: 0.5 * spacing.vertical.nano,
+				},
 				small && { paddingVertical: 0.5 * spacing.vertical.nano },
 				medium && { paddingVertical: spacing.vertical.nano },
 				large && { paddingVertical: 1.25 * spacing.vertical.nano },
@@ -107,6 +115,13 @@ const CustomButton: React.FC<Props> = ({
 				style={[
 					{ color: iconTextColor() },
 					textButton && { color: color.primary },
+					textButton &&
+						active && {
+							color: color.primary,
+							fontWeight: 'bold',
+							textDecorationLine: 'underline',
+							textDecorationStyle: 'double',
+						},
 					textColor && { color: textColor },
 					styleText,
 				]}

@@ -1,11 +1,11 @@
 import React from 'react';
-import { Modal as RNModal, View } from 'react-native';
-import IconText from 'src/components/IconText';
+import { Modal as RNModal, View, Animated } from 'react-native';
 import Text from 'src/components/Text';
-import { color } from 'src/theme';
 import CustomButton from '../CustomButton';
 import { Props } from './ModalProps';
 import styles from './ModalStyle';
+import CloseButton from 'src/components/CloseButton';
+import { color } from 'src/theme';
 
 /**
  *
@@ -26,22 +26,44 @@ import styles from './ModalStyle';
  * @return {*}
  */
 const Modal: React.FC<Props> = ({
+	type = 'fullScreen',
+	transparent = true,
 	isVisible,
 	title,
 	acceptButton,
+	acceptButtonColor,
 	acceptButtonTitle = 'Accept',
 	acceptButtonOnPress,
 	cancelButton,
+	cancelButtonColor,
 	cancelButtonTitle = 'Cancel',
 	cancelButtonOnPress,
+	closeButton = true,
 	handleClose,
 	animationType = 'slide',
 	children,
 }: any): any => {
 	return (
-		<RNModal visible={isVisible} animationType={animationType}>
-			<View style={styles.modalContainer}>
-				<View style={[styles.modalContent, !title && { paddingTop: 0 }]}>
+		<RNModal
+			transparent={transparent}
+			visible={isVisible}
+			animationType={animationType}
+		>
+			<Animated.View
+				style={[
+					styles.modalContainer,
+					type === 'fullScreen' && styles.fullScreenModal,
+
+					type === 'topModal' && styles.topModal,
+				]}
+			>
+				<View
+					style={[
+						styles.modalContent,
+						// eslint-disable-next-line react-native/no-inline-styles
+						!title && { paddingTop: 0 },
+					]}
+				>
 					{title && (
 						<View style={styles.modalHeader}>
 							<Text h2 bold title={title} />
@@ -53,6 +75,11 @@ const Modal: React.FC<Props> = ({
 							<CustomButton
 								rounded
 								medium
+								styleBtn={{
+									backgroundColor: acceptButtonColor
+										? acceptButtonColor
+										: color.primary,
+								}}
 								title={acceptButtonTitle}
 								onPress={() => acceptButtonOnPress && acceptButtonOnPress()}
 							/>
@@ -60,23 +87,20 @@ const Modal: React.FC<Props> = ({
 						{cancelButton && (
 							<CustomButton
 								rounded
-								danger
 								medium
+								styleBtn={{
+									backgroundColor: cancelButtonColor
+										? cancelButtonColor
+										: color.palette.red,
+								}}
 								title={cancelButtonTitle}
 								onPress={() => cancelButtonOnPress && cancelButtonOnPress()}
 							/>
 						)}
 					</View>
 				</View>
-			</View>
-			<IconText
-				iconName='close-outline'
-				iconColor={color.textWhite}
-				iconShadow
-				size={45}
-				onPress={() => handleClose(false)}
-				style={styles.close}
-			/>
+				{closeButton && <CloseButton handleClose={() => handleClose(false)} />}
+			</Animated.View>
 		</RNModal>
 	);
 };

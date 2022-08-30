@@ -26,7 +26,7 @@ const EditProfileScreen: FC<EditProfileScreenProps> = ({
 	// From the previous screen
 	const initialParams = route?.params;
 
-	const { userName } = useUser();
+	const { userName, avatar } = useUser();
 	const { setModalOpen, modalOpen, toggleModal } = useModal(false);
 
 	// Context
@@ -53,7 +53,7 @@ const EditProfileScreen: FC<EditProfileScreenProps> = ({
 				style={style.avatarWrapper}
 				onPress={() => console.log('Pressed   ')}
 			>
-				<Avatar />
+				<Avatar avatar={avatar} size={25} />
 				<Text h4 bold title={userName} />
 			</TouchableOpacity>
 			<Separator />

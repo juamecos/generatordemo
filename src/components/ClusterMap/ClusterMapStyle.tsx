@@ -11,4 +11,10 @@ export default StyleSheet.create({
 
 		marginBottom: 20,
 	},
+	clusterCircle: {
+		borderRadius: 2000,
+		backgroundColor: 'blue',
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
 });

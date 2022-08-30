@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import LoginScreen from 'src/screens/LoginScreen';
@@ -10,7 +10,7 @@ import { useAuth } from 'src/context/authContext/authContext';
 import { useUser } from 'src/context/userContext.tsx/userContext';
 import { useMeQuery } from '../../generated/graphql';
 import LoadingScreen from '../../screens/LoadingScreen/LoadingScreen';
-import { getToken, isTokenValid, removeToken } from '../../utils/tokens';
+import { getToken, isTokenValid } from '../../utils/tokens';
 import CommentsScreen from 'src/screens/CommentsScreen';
 import SingleStoneScreen from 'src/screens/SingleStoneScreen';
 import { color } from 'src/theme';
@@ -19,11 +19,15 @@ import LocationScreen from 'src/screens/LocationScreen';
 import DescriptionScreen from 'src/screens/DescriptionScreen';
 import PreviewScreen from 'src/screens/PreviewScreen';
 import SingleUserScreen from 'src/screens/SingleUserScreen';
-import { IStone } from '../../interfaces/IStone';
 import { usePermissions } from 'src/context/permissionsContext/permissionsContext';
 import PermissionsScreen from '../../screens/PermissionsScreen/PermissionsScreen';
+import WelcomeScreen from 'src/screens/WelcomeScreen';
+import { getData, storeData } from 'src/utils/Storage';
+import OTPScreen from 'src/screens/OTPScreen';
+import ResetPasswordScreen from 'src/screens/ResetPasswordScreen';
 
 export type StackParamList = {
+	WelcomeScreen: undefined;
 	HomeScreen: undefined;
 	LoadingScreen: undefined;
 	PermissionsScreen: undefined;
@@ -38,6 +42,8 @@ export type StackParamList = {
 	LoginScreen: undefined;
 	SignUpScreen: undefined;
 	ForgotScreen: undefined;
+	OTPScreen: undefined;
+	ResetPasswordScreen: undefined;
 };
 
 // Just moking autentication
@@ -48,6 +54,7 @@ const Navigator = () => {
 	const { token, status, signOut } = useAuth();
 	const { setUser, removeUser } = useUser();
 	const { locationStatus } = usePermissions();
+	const [firstLaunch, setFirstLaunch] = useState(true);
 
 	const isPermissionGranted =
 		locationStatus === 'denied' || locationStatus === 'blocked' ? false : true;
@@ -58,14 +65,9 @@ const Navigator = () => {
 
 	useEffect(() => {
 		try {
-			if (loading) {
-				return <LoadingScreen />;
-			}
 			if (token && data?.me?.user) {
-				console.log(data.me.user);
-
 				refetch();
-				setUser(data.me.user);
+				setUser(data?.me?.user);
 			} else {
 				getToken().then(t => {
 					if (!isTokenValid(t)) {
@@ -80,6 +82,19 @@ const Navigator = () => {
 			signOut();
 			removeUser();
 		}
+	}, []);
+
+	useEffect(() => {
+		(async () => {
+			const isFirstLaunch = await getData('isFirstLaunch');
+
+			if (isFirstLaunch == null) {
+				storeData('isFirstLaunch', 'true');
+				setFirstLaunch(true);
+			} else {
+				setFirstLaunch(false);
+			}
+		})();
 	}, []);
 
 	useEffect(() => {
@@ -103,13 +118,21 @@ const Navigator = () => {
 		}
 	}, [data]);
 
+	if (loading || firstLaunch == null) {
+		return <LoadingScreen />;
+	}
+
+	if (error) {
+		console.log(error);
+	}
+
 	return (
 		<Stack.Navigator
 			initialRouteName={'PermissionsScreen'}
 			screenOptions={{
 				headerShown: false,
 				cardStyle: {
-					backgroundColor: color.palette.offWhite,
+					backgroundColor: color.palette.white,
 				},
 			}}
 		>
@@ -144,9 +167,20 @@ const Navigator = () => {
 				</>
 			) : (
 				<>
+					{
+						// firstLaunch ===
+						firstLaunch && (
+							<Stack.Screen name='WelcomeScreen' component={WelcomeScreen} />
+						)
+					}
 					<Stack.Screen name='LoginScreen' component={LoginScreen} />
 					<Stack.Screen name='SignUpScreen' component={SignUpScreen} />
 					<Stack.Screen name='ForgotScreen' component={ForgotScreen} />
+					<Stack.Screen name='OTPScreen' component={OTPScreen} />
+					<Stack.Screen
+						name='ResetPasswordScreen'
+						component={ResetPasswordScreen}
+					/>
 				</>
 			)}
 		</Stack.Navigator>

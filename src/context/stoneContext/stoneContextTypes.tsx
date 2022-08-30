@@ -1,4 +1,4 @@
-import { Asset, ImagePickerResponse } from 'react-native-image-picker';
+import { Asset } from 'react-native-image-picker';
 
 export enum stepsEnum {
 	TAKE_PICTURE = 0,
@@ -18,7 +18,7 @@ export interface IInfo {
 }
 export interface StoneState {
 	step: stepsEnum;
-	image: Asset;
+	image: Asset | null;
 	location: ILocation;
 	title: string;
 	description: string;
@@ -26,11 +26,17 @@ export interface StoneState {
 
 export type StoneAction =
 	| { type: 'SET_STEP'; step: stepsEnum | undefined | null }
-	| { type: 'SET_IMAGE'; image: Asset }
+	| { type: 'SET_IMAGE'; image: Asset | null }
 	| { type: 'SET_LOCATION'; location: ILocation }
 	| { type: 'SET_INFO'; info: { title: string; description: string } };
 
-export type StonePayload = stepsEnum | string | Asset | ILocation | IInfo;
+export type StonePayload =
+	| stepsEnum
+	| string
+	| Asset
+	| ILocation
+	| IInfo
+	| null;
 
 export interface StoneContextActions {
 	setStep: (data: StonePayload) => void;

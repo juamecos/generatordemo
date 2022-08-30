@@ -55,9 +55,29 @@ mutation activeUserAction( $email: String!, $otp: String! ) {
   }
 }
 
+mutation otpCheck($email: String!, $otp: String!) {
+  otpCheck(email: $email, otp: $otp) {
+    status
+    message
+  }
+}
+
+
 mutation resetPasswordAction($email: String!, $otp: String!, $password: String!, $confirmPassword: String!) {
   resetPasswordAction(email: $email, otp: $otp, password: $password, confirmPassword: $confirmPassword) {
     status
     message
+  }
+}
+mutation resetPasswordEmail($email: String!) {
+  resetPasswordEmail(email: $email) {
+    status
+    message
+    mail {
+      from
+      to
+      subject
+      html
+    }
   }
 }

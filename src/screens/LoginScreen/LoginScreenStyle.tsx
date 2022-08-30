@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../theme/spacing';
+import { color, spacing } from 'src/theme';
 
 export default StyleSheet.create({
 	title: {

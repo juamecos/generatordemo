@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import { FindScreenProps } from './FindScreenProps';
 
@@ -6,15 +6,13 @@ import LoadingScreen from '../LoadingScreen';
 
 import { useStonesQuery } from 'src/generated/graphql';
 import ClusterMap from 'src/components/ClusterMap';
-import CrimeMap from 'src/components/CrimeMap';
-import ClusteringMap from 'src/components/ClusteringMap';
-import ClustererMap from 'src/components/ClustererMap';
+
 import Title from 'src/components/Title';
 import Text from 'src/components/Text';
 import CustomButton from 'src/components/CustomButton';
-import { Icon } from 'react-native-vector-icons/Icon';
-import { spacing } from '../../theme/spacing';
-import IconText from 'src/components/IconText';
+
+import { color, spacing } from 'src/theme';
+import BackArrow from 'src/components/BackArrow';
 
 /**
  * Screen component description
@@ -56,19 +54,30 @@ const FindScreen: FC<FindScreenProps> = () => {
 		// 	<Button title='Cestina' onPress={() => changeLang('cs')} />
 		// </View>
 		<SafeAreaView style={{ flex: 1 }}>
-			<Title title='Have you find a stone?' />
-			<ClusteringMap data={data} />
+			<ClusterMap data={data} />
+
 			<View style={{ justifyContent: 'center', alignItems: 'center' }}>
 				<CustomButton
 					medium
 					rounded
-					iconName='search'
+					secondary
+					bordered={false}
+					styleBtn={{
+						borderColor: color.transparent,
+						elevation: 9,
+						position: 'absolute',
+						bottom: spacing.hp(15),
+					}}
+					iconName='eye-outline'
 					iconSize={20}
 					styleText={{ fontSize: 20 }}
 					title="I've found a stone"
-					onPress={() => {}}
+					onPress={() => {
+						console.log('Clock');
+					}}
 				/>
 			</View>
+			<BackArrow />
 		</SafeAreaView>
 	);
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styles from './CardStyle';
 import Avatar from '../Avatar/Avatar';
 import Text from '../Text';
@@ -8,7 +8,6 @@ import { IStone } from '../../interfaces/IStone';
 import { timeSince } from 'src/utils/time';
 import LikeIcon from '../LikeIcon/LikeIcon';
 import { FadeInImage } from '../FadeInImage/FadeInImage';
-import { spacing } from '../../theme/spacing';
 import CommentIcon from '../CommentIcon/CommentIcon';
 
 import { useNavigation } from '@react-navigation/native';
@@ -44,10 +43,7 @@ const Card: React.FC<Props> = ({ data }) => {
 							}}
 						>
 							<View style={styles.avatar}>
-								<Avatar
-									avatar={data.user.avatar ? data.user.avatar : ''} //
-									radius={spacing.horizontal.medium}
-								/>
+								<Avatar avatar={data.user.avatar} />
 							</View>
 							<View style={styles.info}>
 								<View style={styles.userName}>

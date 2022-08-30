@@ -7,6 +7,7 @@ export interface Props {
 	iconName?: string;
 	iconSize?: number;
 	iconColor?: string;
+	active?: boolean;
 	disabled?: boolean;
 	right?: boolean;
 	textButton?: boolean;
@@ -16,6 +17,7 @@ export interface Props {
 	danger?: boolean;
 	rounded?: boolean;
 	bordered?: boolean;
+	mini?: boolean;
 	small?: boolean;
 	medium?: boolean;
 	large?: boolean;

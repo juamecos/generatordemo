@@ -66,59 +66,29 @@ const SingleUserScreen: FC<SingleUserScreenProps> = ({ route, navigation }) => {
 				<View style={style.container}>
 					<View style={style.infoSection}>
 						<View style={style.userAvatarSection}>
-							<Avatar />
-							<Text h3 bold title={userName} />
-						</View>
-						<View style={style.userInfoSecction}>
-							<IconText
-								iconName='location-outline'
-								size={18}
-								title={country}
-								iconColor={color.primary}
-							/>
-							<IconText
-								iconName='reader-outline'
-								size={18}
-								title={bio}
-								iconColor={color.primary}
-							/>
-							<IconText
-								iconName='time-outline'
-								size={18}
-								title={`Registered ${registeredSince}`}
-								iconColor={color.primary}
-							/>
+							<Avatar avatar={avatar} size={30} />
+							<Text h1 bold title={userName} style={style.userName} />
+							<Text h4 title={country} />
 						</View>
 					</View>
 					<View style={style.infoBoxWrapper}>
-						<View
-							style={[
-								style.infoBox,
-								{
-									borderRightColor: color.palette.lighterGrey,
-									borderRightWidth: 1,
-								},
-							]}
-						>
-							<Text h3 bold title='Stones' />
-							<Text h4 title={stoneCount} />
+						<View style={[style.infoBox]}>
+							<Text
+								h2
+								bold
+								title={stoneCount}
+								textColor={color.palette.white}
+							/>
+							<Text h4 title='Stones' textColor={color.palette.white} />
 						</View>
-						<View
-							style={[
-								style.infoBox,
-								{
-									borderRightColor: color.palette.lighterGrey,
-									borderRightWidth: 1,
-								},
-							]}
-						>
-							<Text h3 bold title='Likes' />
-							<Text h4 title={likeCount} />
+						<View style={[style.infoBox]}>
+							<Text h2 bold title={likeCount} textColor={color.palette.white} />
+							<Text h4 title='Likes' textColor={color.palette.white} />
 						</View>
 
 						<View style={style.infoBox}>
-							<Text h3 bold title='Found' />
-							<Text h4 title='23' />
+							<Text h2 bold title='23' textColor={color.palette.white} />
+							<Text h4 title='Found' textColor={color.palette.white} />
 						</View>
 					</View>
 				</View>

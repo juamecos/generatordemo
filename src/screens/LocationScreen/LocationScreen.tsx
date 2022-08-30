@@ -8,6 +8,7 @@ import CustomButton from 'src/components/CustomButton';
 import { useStone } from 'src/context/stoneContext/stoneContext';
 import { spacing } from 'src/theme';
 import BackArrow from 'src/components/BackArrow';
+import ActionSheet from 'src/components/ActionSheet';
 
 /**
  * Screen component description
@@ -20,43 +21,16 @@ const LocationScreen: FC<LocationScreenProps> = ({ route, navigation }) => {
 
 	// Context
 
-	const { step, location, setStep, setLocation } = useStone();
+	const { step, location, setStep } = useStone();
 
 	// Custom hooks
-	console.log(location);
 
 	// Internal state
 
 	// Component JSX
 	return (
-		<SafeAreaView
-			style={{
-				justifyContent: 'center',
-				alignItems: 'center',
-			}}
-			testID='LocationScreen'
-		>
+		<SafeAreaView style={style.container} testID='LocationScreen'>
 			<MapComponent />
-
-			<CustomButton
-				medium
-				rounded
-				disabled={
-					location.latitude === 0 && location.longitude === 0 ? true : false
-				}
-				title='Next'
-				styleBtn={{
-					width: '30%',
-					position: 'absolute',
-					bottom: spacing.hp(20),
-					right: spacing.wp(50),
-					transform: [{ translateX: 50 }],
-				}}
-				onPress={async () => {
-					setStep(step + 1);
-					navigation?.navigate('DescriptionScreen');
-				}}
-			/>
 		</SafeAreaView>
 	);
 };

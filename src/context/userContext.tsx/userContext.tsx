@@ -87,7 +87,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
 		},
 		removeUser: async () => {
 			await removeToken();
-			client.resetStore();
+			client.cache.reset();
 			dispatch({ type: 'REMOVE_USER' });
 		},
 	};

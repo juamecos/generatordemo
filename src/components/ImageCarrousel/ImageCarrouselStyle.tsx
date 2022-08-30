@@ -1,13 +1,16 @@
 import { StyleSheet } from 'react-native';
+import { shadow } from 'src/theme/shadow';
 import { spacing } from '../../theme/spacing';
 
 export default StyleSheet.create({
-	container: {},
-	title: { paddingLeft: spacing.horizontal.tiny },
+	container: { paddingLeft: spacing.horizontal.tiny },
+
 	itemContent: {
 		alignItems: 'center',
 		width: spacing.horizontal.huge,
-		margin: spacing.horizontal.tiny,
+		marginVertical: spacing.horizontal.small,
+		marginRight: spacing.horizontal.tiny,
+		...shadow.light,
 	},
 
 	itemImage: {

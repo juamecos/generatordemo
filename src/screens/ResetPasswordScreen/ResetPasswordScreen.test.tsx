@@ -6,8 +6,8 @@ import 'react-native';
 import React from 'react';
 import {render} from '@testing-library/react-native';
 
-import ClusteringMap from './ClusteringMap';
-
+import ResetPasswordScreen from './ResetPasswordScreen';
+import { ResetPasswordScreenProps } from './ResetPasswordScreenProps';
 
 
 const createTestProps = (props: object) => ({
@@ -15,12 +15,12 @@ const createTestProps = (props: object) => ({
 });
 
 
-describe('<ClusteringMap />', () => {
+describe('<ResetPasswordScreen />', () => {
   const props = createTestProps({});
-  const { getByTestId } = render(<ClusteringMap {...props}/>);
+  const { getByTestId } = render(<ResetPasswordScreen {...props}/>);
 
   test('renders correctly', () => {
-  const element = getByTestId('ClusteringMap');
+  const element = getByTestId('ResetPasswordScreen');
   expect(element).toBeTruthy(); 
     
   });

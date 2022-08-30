@@ -6,7 +6,7 @@ import { useStone } from 'src/context/stoneContext/stoneContext';
 import BackArrow from 'src/components/BackArrow';
 import AddStoneForm from 'src/components/Forms/AddStoneForm';
 import FormContainer from 'src/components/Forms/FormContainer';
-import { spacing } from 'src/theme';
+import { color, spacing } from 'src/theme';
 
 /**
  * Screen component description
@@ -36,6 +36,7 @@ const DescriptionScreen: FC<DescriptionScreenProps> = ({
 				justifyContent: 'center',
 				alignItems: 'center',
 				marginBottom: spacing.vertical.tiny,
+				backgroundColor: color.primaryLighter,
 			}}
 			testID='DescriptionScreen'
 		>

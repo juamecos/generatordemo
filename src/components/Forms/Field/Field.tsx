@@ -16,12 +16,12 @@ const Field = (props: any) => {
 	const hasError = errors[name] && touched[name];
 	return (
 		<View testID='field-component' style={styles.inputBox}>
-			<Text h5 title={label} />
+			<Text h4 title={label} textColor={color.primary} />
 			<TextInput
 				placeholder={placeholder}
 				placeholderTextColor={color.primary}
 				contextMenuHidden
-				// autoCorrect={inputProps.autoCorrect}
+				autoCorrect={inputProps.autoCorrect}
 				style={styles.inputComponent}
 				onChangeText={text => onChange(name)(text)}
 				onBlur={() => {
@@ -29,7 +29,6 @@ const Field = (props: any) => {
 					onBlur(name);
 				}}
 				autoCapitalize='none'
-				autoCorrect={false}
 				value={value}
 				{...inputProps}
 			/>

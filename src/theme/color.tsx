@@ -31,6 +31,10 @@ export const color = {
 	/**
 	 * The main tinting color, but darker.
 	 */
+	primaryLighter: palette.blueLighter,
+	/**
+	 * The main tinting color, but darker.
+	 */
 	primaryDarker: palette.blueDarker,
 	/**
 	 * The secondary color.
@@ -49,9 +53,13 @@ export const color = {
 	 */
 	text: palette.grey,
 	/**
-	 * The color for dark background components.
+	 * The color for white text.
 	 */
 	textWhite: palette.white,
+	/**
+	 * The color for white components.
+	 */
+	white: palette.white,
 	/**
 	 * Secondary information.
 	 */

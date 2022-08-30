@@ -1,7 +1,8 @@
-import { useRef } from 'react';
-import { Animated, Easing } from 'react-native';
+import { useRef, useState } from 'react';
+import { Animated, Easing, LayoutAnimation } from 'react-native';
 
 export const useAnimation = () => {
+	const [showContent, setShowContent] = useState(false);
 	const opacity = useRef(new Animated.Value(0)).current;
 	const position = useRef(new Animated.Value(0)).current;
 	const spinValue = useRef(new Animated.Value(0)).current;
@@ -14,10 +15,10 @@ export const useAnimation = () => {
 		}).start();
 	};
 
-	const fadeOut = () => {
+	const fadeOut = (duration: number = 300) => {
 		Animated.timing(opacity, {
 			toValue: 0,
-			duration: 300,
+			duration,
 			useNativeDriver: true,
 		}).start();
 	};
@@ -34,6 +35,36 @@ export const useAnimation = () => {
 			useNativeDriver: true,
 			// easing: Easing.bounce
 		}).start();
+	};
+
+	const toggleDropdown = (duration: number = 200) => {
+		const config = {
+			toValue: showContent ? 0 : 1,
+			duration,
+			useNativeDriver: true,
+		};
+		Animated.timing(position, config).start();
+		LayoutAnimation.configureNext(toggleAnimation);
+		setShowContent(!showContent);
+	};
+
+	const arrowTransform = position.interpolate({
+		inputRange: [0, 1],
+		outputRange: ['0deg', '90deg'],
+	});
+
+	const toggleAnimation = {
+		duration: 500,
+		update: {
+			duration: 500,
+			property: LayoutAnimation.Properties.opacity,
+			type: LayoutAnimation.Types.easeInEaseOut,
+		},
+		delete: {
+			duration: 500,
+			property: LayoutAnimation.Properties.opacity,
+			type: LayoutAnimation.Types.easeInEaseOut,
+		},
 	};
 
 	const rotate = () => {
@@ -58,9 +89,14 @@ export const useAnimation = () => {
 		opacity,
 		position,
 		spin,
+		showContent,
+		arrowTransform,
+		toggleAnimation,
 		fadeIn,
 		fadeOut,
 		rotate,
 		startMovingPosition,
+		setShowContent,
+		toggleDropdown,
 	};
 };

@@ -13,6 +13,7 @@ export type Props = {
 	h4?: boolean;
 	h5?: boolean;
 	p?: boolean;
+	active?: boolean;
 	bold?: boolean;
 	italic?: boolean;
 	iconName: string;
@@ -51,6 +52,7 @@ const IconText: React.FC<Props> = ({
 	h4,
 	h5,
 	p,
+	active,
 	bold,
 	italic,
 	iconName,

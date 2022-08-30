@@ -1,61 +1,72 @@
-import React, { FC, useEffect } from 'react';
-import { Image, SafeAreaView, Text } from 'react-native';
-import style from './ImagePickerScreenStyle';
+import React, { FC } from 'react';
+import { Image, SafeAreaView, View } from 'react-native';
 import { ImagePickerScreenProps } from './ImagePickerScreenProps';
 import ImagePickerOpenButtons from 'src/components/ImagePickerOpenButtons';
 import { useStone } from 'src/context/stoneContext/stoneContext';
-import { stepsEnum } from 'src/context/stoneContext/stoneContextTypes';
 import CustomButton from 'src/components/CustomButton';
-import { FadeInImage } from '../../components/FadeInImage/FadeInImage';
 import BackArrow from 'src/components/BackArrow';
-import { useAuth } from 'src/context/authContext/authContext';
-import { spacing } from '../../theme/spacing';
+import styles from './ImagePickerScreenStyle';
+import Title from 'src/components/Title';
+import { color } from 'src/theme';
 
 /**
  * Screen component description
  *
  * @returns Screen
  */
-const ImagePickerScreen: FC<ImagePickerScreenProps> = ({
-	route,
-	navigation,
-}) => {
-	const { image } = useStone();
-	const base64img = `data:image/jpeg;base64,${image.base64}`;
+const ImagePickerScreen: FC<ImagePickerScreenProps> = ({ navigation }) => {
+	const { image, setImage } = useStone();
+	const base64img = `data:image/jpeg;base64,${image?.base64}`;
+
+	const takeNewPicture = () => {
+		setImage(null);
+		navigation?.goBack();
+	};
 
 	// Component JSX
 	return (
-		<SafeAreaView style={{ flex: 1 }} testID='ImagePickerScreen'>
-			{image.base64 ? (
-				<Image
-					style={{
-						height: spacing.hp(100),
-						width: spacing.wp(100),
-					}}
-					source={{ uri: base64img }}
-				/>
+		<SafeAreaView style={styles.container} testID='ImagePickerScreen'>
+			{image && image.base64 ? (
+				<>
+					<Image style={styles.imageBase64} source={{ uri: base64img }} />
+					<View style={styles.wrapperBtn}>
+						<CustomButton
+							medium
+							rounded
+							danger
+							styleBtn={styles.dismissBtn}
+							title='Dismiss'
+							onPress={takeNewPicture}
+						/>
+						<CustomButton
+							medium
+							rounded
+							secondary
+							disabled={!image.base64}
+							styleBtn={styles.nextBtn}
+							title='Next'
+							onPress={() => {
+								navigation?.navigate('LocationScreen');
+							}}
+						/>
+					</View>
+				</>
 			) : (
-				<ImagePickerOpenButtons />
+				<View>
+					<Title title={'Take a picture'} styleText={styles.title} />
+					<View style={styles.illustrationContainer}>
+						<Image
+							resizeMode='cover'
+							resizeMethod='scale'
+							source={require('src/assets/image_icon.png')}
+							style={styles.illustration}
+						/>
+					</View>
+					<ImagePickerOpenButtons />
+				</View>
 			)}
 
-			<CustomButton
-				medium
-				rounded
-				disabled={!image.base64}
-				styleBtn={{
-					width: '30%',
-					position: 'absolute',
-					bottom: spacing.hp(20),
-					right: spacing.wp(50),
-					transform: [{ translateX: 50 }],
-				}}
-				title='Next'
-				onPress={async () => {
-					navigation?.navigate('LocationScreen');
-				}}
-			/>
-
-			<BackArrow />
+			<BackArrow onPress={takeNewPicture} />
 		</SafeAreaView>
 	);
 };

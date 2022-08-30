@@ -1,14 +1,15 @@
 import { StyleSheet } from 'react-native';
 import { spacing } from '../../theme/spacing';
 import { color } from '../../theme/color';
+import { constants } from 'src/theme/constants';
 
 export default StyleSheet.create({
 	card: {
 		backgroundColor: color.palette.white,
-		minHeight: spacing.vertical.xlarge,
-		width: spacing.wp(95),
-		marginVertical: spacing.vertical.micro,
-		borderRadius: spacing.horizontal.micro,
+		height: constants.CARD_HEIGHT,
+		width: constants.CARD_WIDTH,
+		marginVertical: constants.CARD_VERTICAL_MARGIN,
+		borderRadius: constants.CARD_BORDER_RADIUS,
 		overflow: 'hidden',
 		shadowColor: '#000',
 		shadowOffset: {

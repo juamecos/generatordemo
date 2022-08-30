@@ -1,8 +1,14 @@
-import React, { FC } from 'react';
+import React, { FC, useRef, useState, useEffect } from 'react';
 
 import style from './HomeScreenStyle';
 import { HomeScreenProps } from './HomeScreenProps';
-import { View, FlatList, ActivityIndicator } from 'react-native';
+import { View, FlatList, ActivityIndicator, Animated } from 'react-native';
+
+import CountryPicker, {
+	Country,
+	CountryCode,
+	FlagButton,
+} from 'react-native-country-picker-modal';
 
 import Card from 'src/components/Card';
 import { IStone } from 'src/interfaces/IStone';
@@ -15,110 +21,228 @@ import useModal from 'src/hooks/useModal';
 
 import useGeolocation from '../../hooks/useGeolocation';
 
+import { constants } from 'src/theme/constants';
+import { useAnimation } from 'src/hooks/useAnimated';
+
+import Modal from 'src/components/Modal';
+
+type filterType = 'Newest' | 'Popular' | 'Nearest' | 'Country';
+
 /**
  * Screen component description
  *
  * @returns Screen
  */
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+	const [filter, setFilter] = useState<filterType>('Newest');
+	const [selectedCountryCode, setSelectedCountryCode] =
+		useState<CountryCode>('CZ');
+	const { countryCode: geoCountryCode } = useGeolocation();
+
+	const { modalOpen, setModalOpen } = useModal();
+
+	const flatListRef = useRef<FlatList>();
 	const {
 		stonesInfoPage,
 		stonesArray,
 		isFetching,
 		handleOnSelected,
+		moreItemsToShow,
 		onRefresh,
 		handleOnEndReached,
 	} = useStonesHook();
 
-	const { modalOpen, setModalOpen, toggleModal } = useModal();
-	const { country, region } = useGeolocation();
+	const { arrowTransform, showContent, toggleDropdown } = useAnimation();
+
+	useEffect(() => {
+		if (!selectedCountryCode) {
+			setSelectedCountryCode(geoCountryCode);
+		}
+	}, []);
 
 	const renderItem = ({ item }: { item: IStone }) => (
 		<Card data={item} handleOnSelected={handleOnSelected} />
 	);
 
+	const filters = [
+		{
+			title: 'Newest',
+			iconName: 'hourglass',
+			onPress: () => {
+				setFilter('Newest');
+				console.log('clock');
+			},
+		},
+		{
+			title: 'Popular',
+			iconName: 'heart',
+			onPress: () => {
+				setFilter('Popular');
+				console.log('clock');
+			},
+		},
+		{
+			title: 'Nearest',
+			iconName: 'locate',
+			onPress: () => {
+				setFilter('Nearest');
+				setSelectedCountryCode(geoCountryCode);
+			},
+		},
+		{
+			title: 'Country',
+			iconName: 'earth',
+			onPress: () => {
+				setFilter('Country');
+
+				setModalOpen(true);
+			},
+		},
+	];
+
+	const scrollUp = () =>
+		flatListRef.current?.scrollToIndex({
+			animated: true,
+			index: 0,
+			viewPosition: 0,
+		});
+
 	const renderListHeaderComponent = () => {
 		return (
-			<View
-				style={{
-					backgroundColor: color.palette.white,
-					minHeight: spacing.vertical.small,
-					width: spacing.wp(95),
-					marginVertical: spacing.vertical.micro,
-					paddingVertical: spacing.vertical.micro,
-					paddingHorizontal: spacing.vertical.micro,
-					borderRadius: spacing.horizontal.micro,
-					flexDirection: 'row',
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					overflow: 'hidden',
-					elevation: 3,
-				}}
-			>
-				<Text h2 bold title={'LapixGame'} />
-				<IconText
-					h5
-					bottom
-					iconName='funnel-outline'
-					title='filter'
-					onPress={() => toggleModal()}
-				/>
-			</View>
+			!isFetching && (
+				<>
+					<View style={style.listHeader}>
+						<Text h2 bold title={'LapixGame'} />
+
+						<FlagButton
+							placeholder='Country'
+							withEmoji
+							withFlagButton
+							countryCode={selectedCountryCode && selectedCountryCode}
+							onOpen={() => setModalOpen(true)}
+						/>
+
+						<Animated.View
+							style={{
+								transform: [
+									{
+										rotateZ: arrowTransform,
+									},
+								],
+							}}
+						>
+							<IconText
+								h5
+								bottom
+								iconName='options-outline'
+								title='filter'
+								onPress={() => toggleDropdown()}
+							/>
+						</Animated.View>
+					</View>
+					{showContent && (
+						<View style={style.listHeaderFilters}>
+							{filters.map((item, index) => {
+								return (
+									<IconText
+										key={index}
+										iconName={
+											item.title === filter
+												? item.iconName
+												: `${item.iconName}-outline`
+										}
+										iconColor={
+											item.title === filter
+												? color.primary
+												: color.primaryLighter
+										}
+										textColor={
+											item.title === filter
+												? color.primary
+												: color.primaryLighter
+										}
+										bold={item.title === filter}
+										bottom
+										title={item.title}
+										onPress={() => item.onPress()}
+									/>
+								);
+							})}
+						</View>
+					)}
+				</>
+			)
 		);
 	};
 
 	const renderListFooterComponent = () => {
-		if (stonesInfoPage.current.page < stonesInfoPage.current.pages) {
-			return (
-				<>
-					<ActivityIndicator
-						style={{ height: 100 }}
-						size={50}
-						color={color.primaryDarker}
-					/>
-				</>
-			);
-		} else {
-			return (
-				<View style={{ marginBottom: spacing.vertical.tiny }}>
-					<Text
-						h4
-						textColor={color.primaryDarker}
-						title='No more items to show'
-					/>
-				</View>
-			);
-		}
+		return moreItemsToShow ? (
+			<>
+				<ActivityIndicator
+					style={{ height: 100, paddingVertical: 100, marginBottom: 50 }}
+					size={50}
+					color={color.secondary}
+				/>
+			</>
+		) : (
+			<View style={{ height: 200, marginVertical: spacing.vertical.tiny }}>
+				<Text h4 textColor={color.white} title='No more items to show' />
+			</View>
+		);
 	};
+
+	const cardLength = constants.CARD_HEIGHT + constants.CARD_VERTICAL_MARGIN * 2;
 	return (
 		<View style={style.container} testID='HomeScreen'>
-			<FlatList
-				showsVerticalScrollIndicator={false}
-				contentContainerStyle={style.feedContainer}
-				data={stonesArray.current}
-				renderItem={renderItem}
-				keyExtractor={(item, index) => index.toString()}
-				onRefresh={onRefresh}
-				refreshing={isFetching}
-				onEndReachedThreshold={0.4} // Thus a value of 0.5 will trigger onEndReached when the end of the content is within half the visible length of the list.
-				onEndReached={handleOnEndReached}
-				ListHeaderComponent={renderListHeaderComponent}
-				ListFooterComponent={renderListFooterComponent}
-			/>
-			{isFetching ? (
-				<>
-					<ActivityIndicator
-						style={{ height: 100 }}
-						size={50}
-						color={color.primaryDarker}
-					/>
-					<Text h5 title='Loading more stones' />
-				</>
-			) : (
-				<Text h5 title='No more items to show' />
+			{stonesArray.current && (
+				<FlatList
+					ref={el => (flatListRef.current = el!)}
+					showsVerticalScrollIndicator={false}
+					contentContainerStyle={style.feedContainer}
+					data={stonesArray.current}
+					initialNumToRender={3}
+					renderItem={renderItem}
+					keyExtractor={(item, index) => index.toString()}
+					onRefresh={onRefresh}
+					refreshing={isFetching}
+					onEndReachedThreshold={0.4}
+					onEndReached={handleOnEndReached}
+					ListHeaderComponent={renderListHeaderComponent}
+					ListFooterComponent={renderListFooterComponent}
+					getItemLayout={(_, index) => ({
+						length: cardLength,
+						offset: cardLength * index,
+						index,
+					})}
+				/>
 			)}
+			<IconText
+				bottom
+				iconName='arrow-up-outline'
+				onPress={() => scrollUp()}
+				iconColor={color.palette.white}
+				style={style.upArrow}
+			/>
+			<Modal isVisible={modalOpen} handleClose={() => setModalOpen(false)}>
+				<CountryPicker
+					withFilter
+					withCloseButton={false}
+					translation='common'
+					withModal={false}
+					countryCode={selectedCountryCode}
+					onSelect={onCountrySelect()}
+					visible
+				/>
+			</Modal>
 		</View>
 	);
+
+	function onCountrySelect(): ((country: Country) => void) | undefined {
+		return country => {
+			setSelectedCountryCode(country.cca2);
+			setModalOpen(false);
+		};
+	}
 };
 
 export default HomeScreen;

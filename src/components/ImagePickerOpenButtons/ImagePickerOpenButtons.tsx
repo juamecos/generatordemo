@@ -1,57 +1,37 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import useImagePicker from 'src/hooks/useImagePicker';
-import CustomButton from '../CustomButton';
 import styles from './ImagePickerOpenButtonsStyle';
-import { useStone } from 'src/context/stoneContext/stoneContext';
-import { useNavigation } from '@react-navigation/native';
+import { color } from 'src/theme';
+import IconText from 'src/components/IconText';
+import { spacing } from '../../theme/spacing';
 
-export type Props = {
-	step?: number;
-};
+const ImagePickerOpenButtons: React.FC = () => {
+	const { onHandleOpenLibrary, onHandleOpenCamera } = useImagePicker();
 
-const ImagePickerOpenButtons: React.FC<Props> = () => {
-	const { setStep, setImage } = useStone();
-	const { image, errorMessage, onHandleOpenLibrary, onHandleOpenCamera } =
-		useImagePicker();
-	const { navigate } = useNavigation();
-
-	useEffect(() => {
-		if (errorMessage) {
-			console.log('ImagePickerOpenButtons error', errorMessage);
-
-			// TODO Alert the user there was an error
-			setImage(null);
-			setStep(0);
-		}
-	}, [errorMessage]);
-
-	useEffect(() => {
-		if (image) {
-			console.log('ImagePickerOpenButtons image', image.uri);
-
-			setImage(image);
-			setStep(1);
-		}
-	}, [image]);
 	return (
 		<View testID='ImagePickerOpenButtons' style={styles.container}>
-			<CustomButton
-				medium
-				primary
-				title='Open Camera'
-				iconName='camera-outline'
-				iconSize={20}
+			<IconText
+				h5
+				bottom
+				iconName={'camera-outline'}
+				title={'Camera'}
+				size={spacing.horizontal.small}
 				onPress={() => onHandleOpenCamera()}
+				iconColor={color.palette.white}
+				textColor={color.textWhite}
+				style={styles.cameraBtn}
 			/>
-			<CustomButton
-				medium
-				secondary
-				title='Open Gallery'
-				iconName='image-outline'
-				iconSize={20}
+			<IconText
+				h5
+				bottom
+				iconName={'image-outline'}
+				title={'Galery'}
+				size={spacing.horizontal.small}
 				onPress={() => onHandleOpenLibrary()}
+				iconColor={color.palette.white}
+				textColor={color.textWhite}
+				style={styles.galeryBtn}
 			/>
 		</View>
 	);

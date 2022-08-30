@@ -6,7 +6,7 @@ export default StyleSheet.create({
 		position: 'absolute',
 		top: spacing.hp('2.8%'),
 		left: spacing.hp('2.8%'),
-		backgroundColor: color.palette.black,
+		backgroundColor: color.primaryDarker,
 		width: spacing.hp('5%'),
 		height: spacing.hp('5%'),
 		borderRadius: 10000,

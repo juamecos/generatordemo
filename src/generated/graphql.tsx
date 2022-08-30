@@ -13,6 +13,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** A JSON scalar can be a string, number, null, or Boolean. Strings must be double quoted. */
+  JSON: any;
 };
 
 export type AddFoundInput = {
@@ -68,6 +70,12 @@ export type FoundInput = {
   verified: Scalars['Boolean'];
 };
 
+export type Geometry = {
+  __typename?: 'Geometry';
+  coordinates?: Maybe<Array<Maybe<Scalars['Float']>>>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type Like = {
   __typename?: 'Like';
   id: Scalars['Int'];
@@ -81,12 +89,6 @@ export type LikeInput = {
   registerDate?: InputMaybe<Scalars['String']>;
   stoneID: Scalars['Int'];
   userID: Scalars['Int'];
-};
-
-export type Location = {
-  __typename?: 'Location';
-  latitude: Scalars['Float'];
-  longitud: Scalars['Float'];
 };
 
 export type LocationInput = {
@@ -139,6 +141,7 @@ export type Mutation = {
   deleteLike?: Maybe<ResultLike>;
   deleteStone?: Maybe<ResultStone>;
   deleteUser?: Maybe<ResultUser>;
+  otpCheck?: Maybe<ResultUser>;
   reportComment?: Maybe<ResultComment>;
   reportStone?: Maybe<ResultStone>;
   resetPasswordAction?: Maybe<ResultUser>;
@@ -221,6 +224,12 @@ export type MutationDeleteUserArgs = {
 };
 
 
+export type MutationOtpCheckArgs = {
+  email: Scalars['String'];
+  otp: Scalars['String'];
+};
+
+
 export type MutationReportCommentArgs = {
   id: Scalars['Int'];
 };
@@ -297,6 +306,10 @@ export type OtpInput = {
 /** Query definitions */
 export type Query = {
   __typename?: 'Query';
+  /** List all stones */
+  allStones?: Maybe<ResultAllStones>;
+  /** List stonesByLocation */
+  allStonesByLocation?: Maybe<ResultStones>;
   comment?: Maybe<ResultComment>;
   /** Comments */
   comments?: Maybe<ResultComments>;
@@ -309,13 +322,29 @@ export type Query = {
   likes?: Maybe<ResultLikes>;
   /** User logged in */
   me?: Maybe<ResultUser>;
+  /** Single stone by id */
   stone?: Maybe<ResultStone>;
-  /** Show stones */
+  /** Show Paginated stones */
   stones?: Maybe<ResultStones>;
   /** Item of users selected */
   user?: Maybe<ResultUser>;
   /** List of users registered in DB */
   users?: Maybe<ResultUsers>;
+};
+
+
+/** Query definitions */
+export type QueryAllStonesArgs = {
+  filter?: InputMaybe<StoneFiltersInput>;
+};
+
+
+/** Query definitions */
+export type QueryAllStonesByLocationArgs = {
+  itemsPage?: InputMaybe<Scalars['Int']>;
+  latitude?: InputMaybe<Scalars['Float']>;
+  longitude?: InputMaybe<Scalars['Float']>;
+  page?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -390,6 +419,16 @@ export type Result = {
   message: Scalars['String'];
   /** Operation status */
   status: Scalars['Boolean'];
+};
+
+export type ResultAllStones = Result & {
+  __typename?: 'ResultAllStones';
+  /** Operation feedback message */
+  message: Scalars['String'];
+  /** Operation status */
+  status: Scalars['Boolean'];
+  /** List of stones registered in DB */
+  stones?: Maybe<Array<Maybe<Stone>>>;
 };
 
 export type ResultComment = Result & {
@@ -553,8 +592,10 @@ export type Stone = {
   commentCount?: Maybe<Scalars['Int']>;
   comments: Array<Maybe<Comment>>;
   description?: Maybe<Scalars['String']>;
+  distance?: Maybe<Scalars['Float']>;
   foundCount?: Maybe<Scalars['Int']>;
   founds: Array<Maybe<Found>>;
+  geometry?: Maybe<Geometry>;
   id: Scalars['Int'];
   image: Scalars['String'];
   latitude: Scalars['Float'];
@@ -564,6 +605,13 @@ export type Stone = {
   registerDate: Scalars['String'];
   title?: Maybe<Scalars['String']>;
   user: User;
+};
+
+export type StoneFiltersInput = {
+  country?: InputMaybe<Scalars['String']>;
+  nearest?: InputMaybe<Scalars['Boolean']>;
+  newest?: InputMaybe<Scalars['Boolean']>;
+  popular?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type StoneInput = {
@@ -823,6 +871,14 @@ export type ActiveUserActionMutationVariables = Exact<{
 
 export type ActiveUserActionMutation = { __typename?: 'Mutation', activeUserAction?: { __typename?: 'ResultUser', status: boolean, message: string } | null };
 
+export type OtpCheckMutationVariables = Exact<{
+  email: Scalars['String'];
+  otp: Scalars['String'];
+}>;
+
+
+export type OtpCheckMutation = { __typename?: 'Mutation', otpCheck?: { __typename?: 'ResultUser', status: boolean, message: string } | null };
+
 export type ResetPasswordActionMutationVariables = Exact<{
   email: Scalars['String'];
   otp: Scalars['String'];
@@ -832,6 +888,13 @@ export type ResetPasswordActionMutationVariables = Exact<{
 
 
 export type ResetPasswordActionMutation = { __typename?: 'Mutation', resetPasswordAction?: { __typename?: 'ResultUser', status: boolean, message: string } | null };
+
+export type ResetPasswordEmailMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type ResetPasswordEmailMutation = { __typename?: 'Mutation', resetPasswordEmail?: { __typename?: 'ResultMail', status: boolean, message: string, mail?: { __typename?: 'Mail', from?: string | null, to: string, subject: string, html: string } | null } | null };
 
 export type UsersQueryVariables = Exact<{
   page: Scalars['Int'];
@@ -1989,6 +2052,41 @@ export function useActiveUserActionMutation(baseOptions?: Apollo.MutationHookOpt
 export type ActiveUserActionMutationHookResult = ReturnType<typeof useActiveUserActionMutation>;
 export type ActiveUserActionMutationResult = Apollo.MutationResult<ActiveUserActionMutation>;
 export type ActiveUserActionMutationOptions = Apollo.BaseMutationOptions<ActiveUserActionMutation, ActiveUserActionMutationVariables>;
+export const OtpCheckDocument = gql`
+    mutation otpCheck($email: String!, $otp: String!) {
+  otpCheck(email: $email, otp: $otp) {
+    status
+    message
+  }
+}
+    `;
+export type OtpCheckMutationFn = Apollo.MutationFunction<OtpCheckMutation, OtpCheckMutationVariables>;
+
+/**
+ * __useOtpCheckMutation__
+ *
+ * To run a mutation, you first call `useOtpCheckMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useOtpCheckMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [otpCheckMutation, { data, loading, error }] = useOtpCheckMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *      otp: // value for 'otp'
+ *   },
+ * });
+ */
+export function useOtpCheckMutation(baseOptions?: Apollo.MutationHookOptions<OtpCheckMutation, OtpCheckMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<OtpCheckMutation, OtpCheckMutationVariables>(OtpCheckDocument, options);
+      }
+export type OtpCheckMutationHookResult = ReturnType<typeof useOtpCheckMutation>;
+export type OtpCheckMutationResult = Apollo.MutationResult<OtpCheckMutation>;
+export type OtpCheckMutationOptions = Apollo.BaseMutationOptions<OtpCheckMutation, OtpCheckMutationVariables>;
 export const ResetPasswordActionDocument = gql`
     mutation resetPasswordAction($email: String!, $otp: String!, $password: String!, $confirmPassword: String!) {
   resetPasswordAction(
@@ -2031,6 +2129,46 @@ export function useResetPasswordActionMutation(baseOptions?: Apollo.MutationHook
 export type ResetPasswordActionMutationHookResult = ReturnType<typeof useResetPasswordActionMutation>;
 export type ResetPasswordActionMutationResult = Apollo.MutationResult<ResetPasswordActionMutation>;
 export type ResetPasswordActionMutationOptions = Apollo.BaseMutationOptions<ResetPasswordActionMutation, ResetPasswordActionMutationVariables>;
+export const ResetPasswordEmailDocument = gql`
+    mutation resetPasswordEmail($email: String!) {
+  resetPasswordEmail(email: $email) {
+    status
+    message
+    mail {
+      from
+      to
+      subject
+      html
+    }
+  }
+}
+    `;
+export type ResetPasswordEmailMutationFn = Apollo.MutationFunction<ResetPasswordEmailMutation, ResetPasswordEmailMutationVariables>;
+
+/**
+ * __useResetPasswordEmailMutation__
+ *
+ * To run a mutation, you first call `useResetPasswordEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useResetPasswordEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [resetPasswordEmailMutation, { data, loading, error }] = useResetPasswordEmailMutation({
+ *   variables: {
+ *      email: // value for 'email'
+ *   },
+ * });
+ */
+export function useResetPasswordEmailMutation(baseOptions?: Apollo.MutationHookOptions<ResetPasswordEmailMutation, ResetPasswordEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ResetPasswordEmailMutation, ResetPasswordEmailMutationVariables>(ResetPasswordEmailDocument, options);
+      }
+export type ResetPasswordEmailMutationHookResult = ReturnType<typeof useResetPasswordEmailMutation>;
+export type ResetPasswordEmailMutationResult = Apollo.MutationResult<ResetPasswordEmailMutation>;
+export type ResetPasswordEmailMutationOptions = Apollo.BaseMutationOptions<ResetPasswordEmailMutation, ResetPasswordEmailMutationVariables>;
 export const UsersDocument = gql`
     query users($page: Int!, $itemsPage: Int!) {
   users(page: $page, itemsPage: $itemsPage) {
@@ -2270,7 +2408,9 @@ export const namedOperations = {
     blockUser: 'blockUser',
     updateUser: 'updateUser',
     activeUserAction: 'activeUserAction',
-    resetPasswordAction: 'resetPasswordAction'
+    otpCheck: 'otpCheck',
+    resetPasswordAction: 'resetPasswordAction',
+    resetPasswordEmail: 'resetPasswordEmail'
   },
   Fragment: {
     CommentObject: 'CommentObject',

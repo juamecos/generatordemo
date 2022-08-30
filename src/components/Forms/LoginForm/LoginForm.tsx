@@ -8,6 +8,7 @@ import { View } from 'react-native';
 import { useAuth } from 'src/context/authContext/authContext';
 import { useSignInMutation } from 'src/generated/graphql';
 import Toast from 'react-native-toast-message';
+import { useNavigation } from '@react-navigation/native';
 
 interface IValues {
 	email: string;
@@ -21,6 +22,7 @@ const initialValuesObject: IValues = {
 
 const LoginForm = () => {
 	const isMounted = useRef(true);
+	const { navigate } = useNavigation();
 	const { signIn: singInAuth, checkingAuth } = useAuth();
 
 	const [signIn, { data, loading, error }] = useSignInMutation({
@@ -79,22 +81,24 @@ const LoginForm = () => {
 					}
 				}}
 			>
-				<Field
-					component={FormField}
-					name='email'
-					label='E-mail'
-					autoCompleteType='email'
-					keyboardType='email-address'
-					textContentType='emailAddress'
-				/>
+				<View>
+					<Field
+						component={FormField}
+						name='email'
+						label='E-mail'
+						autoCompleteType='email'
+						keyboardType='email-address'
+						textContentType='emailAddress'
+					/>
 
-				<Field
-					component={FormField}
-					label='Password'
-					name='password'
-					secureTextEntry
-					textContentType='password'
-				/>
+					<Field
+						component={FormField}
+						label='Password'
+						name='password'
+						secureTextEntry
+						textContentType='password'
+					/>
+				</View>
 
 				<SubmitButton title='Submit' />
 			</FormContainer>
