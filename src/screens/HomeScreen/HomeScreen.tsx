@@ -2,11 +2,18 @@ import React, { FC, useRef, useState, useEffect } from 'react';
 
 import style from './HomeScreenStyle';
 import { HomeScreenProps } from './HomeScreenProps';
-import { View, FlatList, ActivityIndicator, Animated } from 'react-native';
+import {
+	View,
+	FlatList,
+	ActivityIndicator,
+	Animated,
+	Pressable,
+} from 'react-native';
 
 import CountryPicker, {
 	Country,
 	CountryCode,
+	Flag,
 	FlagButton,
 } from 'react-native-country-picker-modal';
 
@@ -34,6 +41,7 @@ type filterType = 'Newest' | 'Popular' | 'Nearest' | 'Country';
  * @returns Screen
  */
 const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+	const isMounted = useRef(true);
 	const [filter, setFilter] = useState<filterType>('Newest');
 	const [selectedCountryCode, setSelectedCountryCode] =
 		useState<CountryCode>('CZ');
@@ -58,7 +66,10 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 		if (!selectedCountryCode) {
 			setSelectedCountryCode(geoCountryCode);
 		}
-	}, []);
+		return () => {
+			isMounted.current = false;
+		};
+	}, [selectedCountryCode, geoCountryCode]);
 
 	const renderItem = ({ item }: { item: IStone }) => (
 		<Card data={item} handleOnSelected={handleOnSelected} />
@@ -114,13 +125,25 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
 					<View style={style.listHeader}>
 						<Text h2 bold title={'LapixGame'} />
 
-						<FlagButton
+						{/* <FlagButton
 							placeholder='Country'
 							withEmoji
 							withFlagButton
-							countryCode={selectedCountryCode && selectedCountryCode}
+							countryCode={selectedCountryCode}
 							onOpen={() => setModalOpen(true)}
-						/>
+						/> */}
+						<Pressable
+							style={{
+								flexDirection: 'row',
+								justifyContent: 'center',
+								alignItems: 'center',
+								alignContent: 'center',
+							}}
+							onPress={() => setModalOpen(true)}
+						>
+							<Flag flagSize={18} countryCode={selectedCountryCode} />
+							<Text h5 title={selectedCountryCode} />
+						</Pressable>
 
 						<Animated.View
 							style={{

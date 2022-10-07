@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 
+//TODO check validations for user name and code
+
 const userName = Yup.string()
 	.required('Username is required')
 	.label('userName');
@@ -19,6 +21,10 @@ const confirmPassword = Yup.string()
 	.required('Confirm password is required')
 	.label('confirmPassword');
 
+const code = Yup.string()
+	.required('Code is required. Check behind the stone')
+	.label('code');
+
 const signUpValidationSchema = Yup.object().shape({
 	userName,
 	email,
@@ -32,10 +38,12 @@ const resetPasswordValidationSchema = Yup.object().shape({
 	password,
 	confirmPassword,
 });
+const codeValidationSchema = Yup.object().shape({ code });
 
 export {
 	signUpValidationSchema,
 	loginValidationSchema,
 	forgotValidationSchema,
 	resetPasswordValidationSchema,
+	codeValidationSchema,
 };

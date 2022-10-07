@@ -6,8 +6,8 @@ import 'react-native';
 import React from 'react';
 import {render} from '@testing-library/react-native';
 
-import AddStoneScreen from './AddStoneScreen';
-import { AddStoneScreenProps } from './AddStoneScreenProps';
+import FoundStoneMapScreen from './FoundStoneMapScreen';
+import { FoundStoneMapScreenProps } from './FoundStoneMapScreenProps';
 
 
 const createTestProps = (props: object) => ({
@@ -15,12 +15,12 @@ const createTestProps = (props: object) => ({
 });
 
 
-describe('<AddStoneScreen />', () => {
+describe('<FoundStoneMapScreen />', () => {
   const props = createTestProps({});
-  const { getByTestId } = render(<AddStoneScreen {...props}/>);
+  const { getByTestId } = render(<FoundStoneMapScreen {...props}/>);
 
   test('renders correctly', () => {
-  const element = getByTestId('AddStoneScreen');
+  const element = getByTestId('FoundStoneMapScreen');
   expect(element).toBeTruthy(); 
     
   });

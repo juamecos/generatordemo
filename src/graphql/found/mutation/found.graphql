@@ -1,0 +1,23 @@
+mutation AddFound($found: AddFoundInput) {
+  addFound(found: $found) {
+    status
+    message
+    found {
+      id
+      image
+      latitude
+      longitude
+      stone {
+        id
+      }
+      user {
+        id
+      }
+      owner {
+        id
+      }
+      registerDate
+      verified
+    }
+  }
+}

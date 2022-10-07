@@ -26,6 +26,9 @@ import { getData, storeData } from 'src/utils/Storage';
 import OTPScreen from 'src/screens/OTPScreen';
 import ResetPasswordScreen from 'src/screens/ResetPasswordScreen';
 
+import FoundStoneCodeScreen from '../../screens/FoundStoneCodeScreen';
+import FoundStoneMapScreen from '../../screens/FoundStoneMapScreen';
+
 export type StackParamList = {
 	WelcomeScreen: undefined;
 	HomeScreen: undefined;
@@ -44,6 +47,8 @@ export type StackParamList = {
 	ForgotScreen: undefined;
 	OTPScreen: undefined;
 	ResetPasswordScreen: undefined;
+	FoundStoneCodeScreen: undefined;
+	FoundStoneMapScreen: undefined;
 };
 
 // Just moking autentication
@@ -152,6 +157,14 @@ const Navigator = () => {
 					<Stack.Screen
 						name='SingleStoneScreen'
 						component={SingleStoneScreen}
+					/>
+					<Stack.Screen
+						name='FoundStoneCodeScreen'
+						component={FoundStoneCodeScreen}
+					/>
+					<Stack.Screen
+						name='FoundStoneMapScreen'
+						component={FoundStoneMapScreen}
 					/>
 					<Stack.Screen name='SingleUserScreen' component={SingleUserScreen} />
 					<Stack.Screen

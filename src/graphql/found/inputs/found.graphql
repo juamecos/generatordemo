@@ -1,0 +1,6 @@
+input AddFoundInput {
+  code: String!
+  image: String!
+  longitude: Float!
+  latitude: Float!
+}

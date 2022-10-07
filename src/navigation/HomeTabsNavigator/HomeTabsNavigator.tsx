@@ -18,6 +18,7 @@ import { usePermissions } from 'src/context/permissionsContext/permissionsContex
 import { BlockUserMutationResult } from '../../generated/graphql';
 import { shadow } from 'src/theme/shadow';
 import Loader from 'src/components/Loader';
+import { useStone } from '../../context/stoneContext/stoneContext';
 
 export enum TabNames {
 	Home = 'HomeScreen',
@@ -34,6 +35,8 @@ const HomeTabsNavigator = () => {
 	const { t } = useTranslation();
 	const { navigate } = useNavigation();
 	const { id } = useUser();
+
+	const { step, image, setImage, setStep } = useStone();
 
 	if (!id) return <Loader />;
 
@@ -106,7 +109,11 @@ const HomeTabsNavigator = () => {
 						),
 						tabBarButton: props => (
 							<CustomTabBarButton
-								onPress={() => navigate('ImagePickerScreen')}
+								onPress={() =>
+									navigate('ImagePickerScreen', {
+										entity: 'Stone',
+									})
+								}
 								children={props.children}
 							/>
 						),

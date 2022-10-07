@@ -45,9 +45,6 @@ const EditProfileScreen: FC<EditProfileScreenProps> = ({
 			testID='EditProfileScreen'
 			style={style.container}
 		>
-			<CustomButton title='OpenModal' onPress={() => toggleModal()} />
-
-			<BackArrow onPress={() => navigation?.goBack()} />
 			<Title title='Edit Profile' />
 			<TouchableOpacity
 				style={style.avatarWrapper}
@@ -92,6 +89,7 @@ const EditProfileScreen: FC<EditProfileScreenProps> = ({
 				<Text title='Modal Text' />
 				<Text title='Modal Text' />
 			</Modal>
+			<BackArrow onPress={() => navigation?.goBack()} />
 		</SafeAreaView>
 	);
 };

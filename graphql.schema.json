@@ -2569,7 +2569,7 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
-              "name": "Int",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -2700,6 +2700,29 @@
             "type": {
               "kind": "OBJECT",
               "name": "ResultStones",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "checkStoneByCode",
+            "description": "Founds",
+            "args": [
+              {
+                "name": "code",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "ResultStone",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3362,7 +3385,7 @@
         "fields": [
           {
             "name": "found",
-            "description": "List of stones registered in DB",
+            "description": "List of founds registered in DB",
             "args": [],
             "type": {
               "kind": "OBJECT",

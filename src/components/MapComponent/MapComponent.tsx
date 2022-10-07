@@ -15,14 +15,22 @@ import Toast from 'react-native-toast-message';
 import CustomButton from '../CustomButton';
 import { useNavigation } from '@react-navigation/native';
 import { color } from 'src/theme';
+import { useFound } from 'src/context/foundContext/foundContext';
 
 export type Props = {
-	name?: string;
+	routeName?: string;
 };
 
-const MapComponent: React.FC<Props> = () => {
+const MapComponent: React.FC<Props> = ({ routeName }) => {
 	const { navigate } = useNavigation();
 	const { location, step, setLocation, setStep } = useStone();
+	const {
+		step: foundStep,
+		location: foundLocation,
+		setFoundStep,
+		setFoundLocation,
+	} = useFound();
+
 	const [marker, setMarker] = useState<ILocation | null>(null);
 	const [region, setRegion] = useState<Region>();
 	const { modalOpen, setModalOpen, toggleModal } = useModal();
@@ -50,9 +58,13 @@ const MapComponent: React.FC<Props> = () => {
 	useEffect(() => {}, []);
 
 	const handleOnLongPress = async (e: MapEvent) => {
-		console.log(e.nativeEvent.coordinate);
+		if (routeName === 'LocationScreen') {
+			setLocation(e.nativeEvent.coordinate);
+		}
+		if (routeName === 'FoundStoneMapScreen') {
+			setFoundLocation(e.nativeEvent.coordinate);
+		}
 
-		setLocation(e.nativeEvent.coordinate);
 		setMarker(e.nativeEvent.coordinate);
 	};
 
@@ -66,7 +78,12 @@ const MapComponent: React.FC<Props> = () => {
 				text2: `${country} - ${subdivision} - ${locality}`,
 				visibilityTime: 5000,
 			});
-			setLocation(currentPosition);
+			if (routeName === 'LocationScreen') {
+				setLocation(currentPosition);
+			}
+			if (routeName === 'FoundStoneMapScreen') {
+				setFoundLocation(currentPosition);
+			}
 			setMarker(currentPosition);
 		} else {
 			Toast.show({
@@ -74,6 +91,51 @@ const MapComponent: React.FC<Props> = () => {
 				text1: 'Cannot use your current possition',
 				visibilityTime: 5000,
 			});
+		}
+	};
+
+	const onSetAgain = () => {
+		setMarker(null);
+		if (routeName === 'LocationScreen') {
+			setLocation({
+				latitude: 0,
+				longitude: 0,
+			});
+		}
+		if (routeName === 'FoundStoneMapScreen') {
+			setFoundLocation({
+				latitude: 0,
+				longitude: 0,
+			});
+		}
+	};
+
+	const isContinueButtonDisabled = () => {
+		if (
+			routeName === 'FoundStoneMapScreen' &&
+			foundLocation.latitude === 0 &&
+			foundLocation.longitude === 0
+		) {
+			return true;
+		}
+		if (
+			routeName === 'LocationScreen' &&
+			location.latitude === 0 &&
+			location.longitude === 0
+		) {
+			return true;
+		}
+		return false;
+	};
+
+	const onContinue = () => {
+		if (routeName === 'FoundStoneMapScreen') {
+			setFoundStep(foundStep + 1);
+			navigate('ImagePickerScreen', { entity: 'Found' });
+		}
+		if (routeName === 'LocationScreen') {
+			setStep(step + 1);
+			navigate('DescriptionScreen');
 		}
 	};
 
@@ -111,29 +173,25 @@ const MapComponent: React.FC<Props> = () => {
 					rounded
 					secondary
 					title='Set again'
-					onPress={() => {
-						setLocation(null);
-						setMarker(null);
-					}}
+					onPress={() => onSetAgain()}
 				/>
 				<CustomButton
 					medium
 					rounded
 					primary
-					disabled={
-						location.latitude === 0 && location.longitude === 0 ? true : false
-					}
+					disabled={isContinueButtonDisabled()}
 					title='Continue'
-					onPress={async () => {
-						setStep(step + 1);
-						navigate('DescriptionScreen');
-					}}
+					onPress={async () => onContinue()}
 				/>
 			</View>
 			<Modal
 				isVisible={modalOpen}
 				type='topModal'
-				title={'Where did you leave the stone?'}
+				title={
+					routeName === 'LocationScreen'
+						? 'Where did you leave the stone?'
+						: 'Where did you find the stone?'
+				}
 				handleClose={() => toggleModal()}
 				acceptButton
 				acceptButtonColor={color.secondary}

@@ -1,0 +1,10 @@
+query CheckStoneByCode($code: String) {
+  checkStoneByCode(code: $code) {
+    status
+    message
+    stone {
+      id
+      code
+    }
+  }
+}

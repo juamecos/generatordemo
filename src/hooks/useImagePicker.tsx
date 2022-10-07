@@ -18,7 +18,6 @@ const options: CameraOptions = {
 };
 
 const useImagePicker = () => {
-	// const [image, setImage] = useState<Asset>();
 	const { image, setImage } = useStone();
 	const [errorMessage, setErrorMessage] = useState<string>();
 

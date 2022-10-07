@@ -19,7 +19,7 @@ import BackArrow from 'src/components/BackArrow';
  *
  * @returns Screen
  */
-const FindScreen: FC<FindScreenProps> = () => {
+const FindScreen: FC<FindScreenProps> = ({ navigation }) => {
 	// Context
 
 	// Custom hooks
@@ -73,7 +73,7 @@ const FindScreen: FC<FindScreenProps> = () => {
 					styleText={{ fontSize: 20 }}
 					title="I've found a stone"
 					onPress={() => {
-						console.log('Clock');
+						navigation?.navigate('FoundStoneCodeScreen');
 					}}
 				/>
 			</View>

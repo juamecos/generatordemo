@@ -1,3 +1,4 @@
+import React, { createContext, useReducer } from 'react';
 import {
 	StoneState,
 	StoneContextType,
@@ -5,7 +6,6 @@ import {
 	ILocation,
 	IInfo,
 } from './stoneContextTypes';
-import React, { createContext, useReducer } from 'react';
 
 import { ImagePickerResponse } from 'react-native-image-picker';
 import { StoneReducer } from './stoneReducer';

@@ -19,18 +19,9 @@ const LocationScreen: FC<LocationScreenProps> = ({ route, navigation }) => {
 	// From the previous screen
 	const initialParams = route?.params;
 
-	// Context
-
-	const { step, location, setStep } = useStone();
-
-	// Custom hooks
-
-	// Internal state
-
-	// Component JSX
 	return (
 		<SafeAreaView style={style.container} testID='LocationScreen'>
-			<MapComponent />
+			<MapComponent routeName='LocationScreen' />
 		</SafeAreaView>
 	);
 };

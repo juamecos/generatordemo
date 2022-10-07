@@ -291,7 +291,7 @@ export type MutationVerifyFoundArgs = {
 export type Otp = {
   __typename?: 'Otp';
   /** Expiration time of the otp in miliseconds */
-  exp?: Maybe<Scalars['Int']>;
+  exp?: Maybe<Scalars['String']>;
   /** Hassed 6 digits code */
   hash?: Maybe<Scalars['String']>;
 };
@@ -310,6 +310,8 @@ export type Query = {
   allStones?: Maybe<ResultAllStones>;
   /** List stonesByLocation */
   allStonesByLocation?: Maybe<ResultStones>;
+  /** Founds */
+  checkStoneByCode?: Maybe<ResultStone>;
   comment?: Maybe<ResultComment>;
   /** Comments */
   comments?: Maybe<ResultComments>;
@@ -345,6 +347,12 @@ export type QueryAllStonesByLocationArgs = {
   latitude?: InputMaybe<Scalars['Float']>;
   longitude?: InputMaybe<Scalars['Float']>;
   page?: InputMaybe<Scalars['Int']>;
+};
+
+
+/** Query definitions */
+export type QueryCheckStoneByCodeArgs = {
+  code?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -453,7 +461,7 @@ export type ResultComments = Result & {
 
 export type ResultFound = Result & {
   __typename?: 'ResultFound';
-  /** List of stones registered in DB */
+  /** List of founds registered in DB */
   found?: Maybe<Found>;
   /** Operation feedback message */
   message: Scalars['String'];
@@ -731,6 +739,20 @@ export type CountCommentsQueryVariables = Exact<{
 
 export type CountCommentsQuery = { __typename?: 'Query', countComments?: { __typename?: 'ResultsCountComments', status: boolean, message: string, count?: number | null } | null };
 
+export type AddFoundMutationVariables = Exact<{
+  found?: InputMaybe<AddFoundInput>;
+}>;
+
+
+export type AddFoundMutation = { __typename?: 'Mutation', addFound?: { __typename?: 'ResultFound', status: boolean, message: string, found?: { __typename?: 'Found', id: number, image: string, latitude: number, longitude: number, registerDate: string, verified: boolean, stone?: { __typename?: 'Stone', id: number } | null, user?: { __typename?: 'User', id: number } | null, owner?: { __typename?: 'User', id: number } | null } | null } | null };
+
+export type CheckStoneByCodeQueryVariables = Exact<{
+  code?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type CheckStoneByCodeQuery = { __typename?: 'Query', checkStoneByCode?: { __typename?: 'ResultStone', status: boolean, message: string, stone?: { __typename?: 'Stone', id: number, code?: string | null } | null } | null };
+
 export type MailObjectFragment = { __typename?: 'Mail', from?: string | null, to: string, subject: string, html: string };
 
 export type ResultInfoObjectFragment = { __typename?: 'ResultInfo', page: number, pages: number, total: number, itemsPage: number };
@@ -779,21 +801,21 @@ export type CountLikesQueryVariables = Exact<{
 
 export type CountLikesQuery = { __typename?: 'Query', countLikes?: { __typename?: 'ResultsCountLike', status: boolean, message: string, count?: number | null } | null };
 
-export type StoneObjectFragment = { __typename?: 'Stone', id: number, image: string, title?: string | null, description?: string | null, registerDate: string, latitude: number, longitude: number, active?: boolean | null, abuse?: boolean | null, code?: string | null, commentCount?: number | null, likeCount?: number | null, user: { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: number | null } | null }, comments: Array<{ __typename: 'Comment', id: number, comment: string, registerDate?: string | null, active?: boolean | null, abuse?: boolean | null, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: number, registerDate: string, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number } } | null> };
+export type StoneObjectFragment = { __typename?: 'Stone', id: number, image: string, title?: string | null, description?: string | null, registerDate: string, latitude: number, longitude: number, active?: boolean | null, abuse?: boolean | null, code?: string | null, commentCount?: number | null, likeCount?: number | null, user: { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: string | null } | null }, comments: Array<{ __typename: 'Comment', id: number, comment: string, registerDate?: string | null, active?: boolean | null, abuse?: boolean | null, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: number, registerDate: string, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number } } | null> };
 
 export type AddStoneMutationVariables = Exact<{
   stone: AddStoneInput;
 }>;
 
 
-export type AddStoneMutation = { __typename?: 'Mutation', addStone?: { __typename?: 'ResultStone', status: boolean, message: string, stone?: { __typename?: 'Stone', id: number, image: string, title?: string | null, description?: string | null, registerDate: string, latitude: number, longitude: number, active?: boolean | null, abuse?: boolean | null, code?: string | null, commentCount?: number | null, likeCount?: number | null, user: { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: number | null } | null }, comments: Array<{ __typename: 'Comment', id: number, comment: string, registerDate?: string | null, active?: boolean | null, abuse?: boolean | null, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: number, registerDate: string, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number } } | null> } | null } | null };
+export type AddStoneMutation = { __typename?: 'Mutation', addStone?: { __typename?: 'ResultStone', status: boolean, message: string, stone?: { __typename?: 'Stone', id: number, image: string, title?: string | null, description?: string | null, registerDate: string, latitude: number, longitude: number, active?: boolean | null, abuse?: boolean | null, code?: string | null, commentCount?: number | null, likeCount?: number | null, user: { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: string | null } | null }, comments: Array<{ __typename: 'Comment', id: number, comment: string, registerDate?: string | null, active?: boolean | null, abuse?: boolean | null, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: number, registerDate: string, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number } } | null> } | null } | null };
 
 export type UpdateStoneMutationVariables = Exact<{
   stone: StoneInput;
 }>;
 
 
-export type UpdateStoneMutation = { __typename?: 'Mutation', updateStone?: { __typename?: 'ResultStone', status: boolean, message: string, stone?: { __typename?: 'Stone', id: number, image: string, title?: string | null, description?: string | null, registerDate: string, latitude: number, longitude: number, active?: boolean | null, abuse?: boolean | null, code?: string | null, commentCount?: number | null, likeCount?: number | null, user: { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: number | null } | null }, comments: Array<{ __typename: 'Comment', id: number, comment: string, registerDate?: string | null, active?: boolean | null, abuse?: boolean | null, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: number, registerDate: string, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number } } | null> } | null } | null };
+export type UpdateStoneMutation = { __typename?: 'Mutation', updateStone?: { __typename?: 'ResultStone', status: boolean, message: string, stone?: { __typename?: 'Stone', id: number, image: string, title?: string | null, description?: string | null, registerDate: string, latitude: number, longitude: number, active?: boolean | null, abuse?: boolean | null, code?: string | null, commentCount?: number | null, likeCount?: number | null, user: { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: string | null } | null }, comments: Array<{ __typename: 'Comment', id: number, comment: string, registerDate?: string | null, active?: boolean | null, abuse?: boolean | null, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null } } | null>, likes: Array<{ __typename?: 'Like', id: number, registerDate: string, stone: { __typename?: 'Stone', id: number }, user: { __typename?: 'User', id: number } } | null> } | null } | null };
 
 export type DeleteStoneMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -824,7 +846,7 @@ export type StoneQueryVariables = Exact<{
 
 export type StoneQuery = { __typename?: 'Query', stone?: { __typename?: 'ResultStone', status: boolean, message: string, stone?: { __typename?: 'Stone', id: number, image: string, title?: string | null, description?: string | null, registerDate: string, active?: boolean | null, abuse?: boolean | null, commentCount?: number | null, likeCount?: number | null, foundCount?: number | null, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null }, comments: Array<{ __typename?: 'Comment', id: number, comment: string, registerDate?: string | null, active?: boolean | null, abuse?: boolean | null, user: { __typename?: 'User', id: number, userName: string, avatar?: string | null } } | null> } | null } | null };
 
-export type UserObjectFragment = { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: number | null } | null };
+export type UserObjectFragment = { __typename?: 'User', id: number, userName: string, email: string, password: string, registerDate: string, avatar?: string | null, role: Role, active?: boolean | null, otp?: { __typename?: 'Otp', hash?: string | null, exp?: string | null } | null };
 
 export type SignInMutationVariables = Exact<{
   email: Scalars['String'];
@@ -1318,6 +1340,97 @@ export function useCountCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type CountCommentsQueryHookResult = ReturnType<typeof useCountCommentsQuery>;
 export type CountCommentsLazyQueryHookResult = ReturnType<typeof useCountCommentsLazyQuery>;
 export type CountCommentsQueryResult = Apollo.QueryResult<CountCommentsQuery, CountCommentsQueryVariables>;
+export const AddFoundDocument = gql`
+    mutation AddFound($found: AddFoundInput) {
+  addFound(found: $found) {
+    status
+    message
+    found {
+      id
+      image
+      latitude
+      longitude
+      stone {
+        id
+      }
+      user {
+        id
+      }
+      owner {
+        id
+      }
+      registerDate
+      verified
+    }
+  }
+}
+    `;
+export type AddFoundMutationFn = Apollo.MutationFunction<AddFoundMutation, AddFoundMutationVariables>;
+
+/**
+ * __useAddFoundMutation__
+ *
+ * To run a mutation, you first call `useAddFoundMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFoundMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFoundMutation, { data, loading, error }] = useAddFoundMutation({
+ *   variables: {
+ *      found: // value for 'found'
+ *   },
+ * });
+ */
+export function useAddFoundMutation(baseOptions?: Apollo.MutationHookOptions<AddFoundMutation, AddFoundMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddFoundMutation, AddFoundMutationVariables>(AddFoundDocument, options);
+      }
+export type AddFoundMutationHookResult = ReturnType<typeof useAddFoundMutation>;
+export type AddFoundMutationResult = Apollo.MutationResult<AddFoundMutation>;
+export type AddFoundMutationOptions = Apollo.BaseMutationOptions<AddFoundMutation, AddFoundMutationVariables>;
+export const CheckStoneByCodeDocument = gql`
+    query CheckStoneByCode($code: String) {
+  checkStoneByCode(code: $code) {
+    status
+    message
+    stone {
+      id
+      code
+    }
+  }
+}
+    `;
+
+/**
+ * __useCheckStoneByCodeQuery__
+ *
+ * To run a query within a React component, call `useCheckStoneByCodeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckStoneByCodeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckStoneByCodeQuery({
+ *   variables: {
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useCheckStoneByCodeQuery(baseOptions?: Apollo.QueryHookOptions<CheckStoneByCodeQuery, CheckStoneByCodeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckStoneByCodeQuery, CheckStoneByCodeQueryVariables>(CheckStoneByCodeDocument, options);
+      }
+export function useCheckStoneByCodeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckStoneByCodeQuery, CheckStoneByCodeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckStoneByCodeQuery, CheckStoneByCodeQueryVariables>(CheckStoneByCodeDocument, options);
+        }
+export type CheckStoneByCodeQueryHookResult = ReturnType<typeof useCheckStoneByCodeQuery>;
+export type CheckStoneByCodeLazyQueryHookResult = ReturnType<typeof useCheckStoneByCodeLazyQuery>;
+export type CheckStoneByCodeQueryResult = Apollo.QueryResult<CheckStoneByCodeQuery, CheckStoneByCodeQueryVariables>;
 export const HolaDocument = gql`
     query hola {
   hola
@@ -2379,6 +2492,7 @@ export const namedOperations = {
     comments: 'comments',
     comment: 'comment',
     countComments: 'countComments',
+    CheckStoneByCode: 'CheckStoneByCode',
     hola: 'hola',
     likes: 'likes',
     isLike: 'isLike',
@@ -2396,6 +2510,7 @@ export const namedOperations = {
     deleteComment: 'deleteComment',
     blockComment: 'blockComment',
     reportComment: 'reportComment',
+    AddFound: 'AddFound',
     addLike: 'addLike',
     deleteLike: 'deleteLike',
     addStone: 'addStone',
